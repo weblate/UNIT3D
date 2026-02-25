@@ -36,7 +36,7 @@ window.Swal = Swal;
 import.meta.glob(['/public/img/pipes/**', '/resources/sass/vendor/webfonts/font-awesome/**']);
 
 // Livewire + AlpineJS
-import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm.js';
+import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.csp.esm.js';
 
 // Custom AlpineJS Components
 import './components/alpine/chatbox';
