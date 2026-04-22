@@ -37,6 +37,7 @@ use App\Repositories\ChatRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Exception;
+use Illuminate\Validation\Rule;
 
 /**
  * @see \Tests\Todo\Feature\Http\Controllers\PostControllerTest
@@ -204,10 +205,6 @@ class PostController extends Controller
      */
     public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
     {
-        $request->validate([
-            'content' => 'required|min:1',
-        ]);
-
         $user = $request->user();
 
         $post = Post::query()->findOrFail($id);
@@ -217,9 +214,14 @@ class PostController extends Controller
 
         abort_unless($post->topic()->authorized(canReplyTopic: true)->exists(), 403);
 
-        $post->update([
-            'content' => $request->input('content'),
-        ]);
+        $post->update($request->validate([
+            'content' => 'required|min:1',
+            'pinned'  => [
+                'sometimes',
+                'boolean',
+                Rule::excludeIf(!$user->group->is_modo),
+            ]
+        ]));
 
         return redirect()->to($postUrl)
             ->with('success', trans('forum.edit-post-success'));
