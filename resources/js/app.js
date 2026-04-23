@@ -40,16 +40,28 @@ import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.e
 
 // Custom AlpineJS Components
 import './components/alpine/chatbox';
-import './components/alpine/checkboxGrid';
-import './components/alpine/clipboardButton';
-import './components/alpine/comparison';
-import './components/alpine/dislikeButton';
-import './components/alpine/likeButton';
-import './components/alpine/posterRow';
-import './components/alpine/smallBookmarkButton';
-import './components/alpine/tabs';
-import './components/alpine/ternaryCheckMark';
-import './components/alpine/toggle';
-import './components/alpine/torrentGrouping';
+import checkboxGrid from './components/alpine/checkboxGrid';
+import clipboardButton from './components/alpine/clipboardButton';
+import comparison from './components/alpine/comparison';
+import dislikeButton from './components/alpine/dislikeButton';
+import likeButton from './components/alpine/likeButton';
+import posterRow from './components/alpine/posterRow';
+import smallBookmarkButton from './components/alpine/smallBookmarkButton';
+import tabs from './components/alpine/tabs';
+import ternaryCheckMark from './components/alpine/ternaryCheckMark';
+import toggle from './components/alpine/toggle';
+import torrentGrouping from './components/alpine/torrentGrouping';
+
+Alpine.data('checkboxGrid', checkboxGrid);
+Alpine.data('clipboardButton', clipboardButton);
+Alpine.data('comparison', comparison);
+Alpine.data('dislikeButton', dislikeButton);
+Alpine.data('likeButton', likeButton);
+Alpine.data('posterRow', posterRow);
+Alpine.data('smallBookmarkButton', smallBookmarkButton);
+Alpine.data('tabs', tabs);
+Alpine.data('ternaryCheckMark', ternaryCheckMark);
+Alpine.data('toggle', toggle);
+Alpine.data('torrentGrouping', torrentGrouping);
 
 Livewire.start();
