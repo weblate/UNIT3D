@@ -58,10 +58,10 @@ Alpine.data('comparison', comparison);
 Alpine.data('dislikeButton', dislikeButton);
 Alpine.data('likeButton', likeButton);
 Alpine.data('posterRow', posterRow);
-Alpine.data('smallBookmarkButton', smallBookmarkButton);
+Alpine.data('bookmark', smallBookmarkButton);
 Alpine.data('tabs', tabs);
 Alpine.data('ternaryCheckMark', ternaryCheckMark);
 Alpine.data('toggle', toggle);
-Alpine.data('torrentGrouping', torrentGrouping);
+Alpine.data('torrentGroup', torrentGrouping);
 
 Livewire.start();
