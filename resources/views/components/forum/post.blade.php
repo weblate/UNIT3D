@@ -11,6 +11,13 @@
             )"
 >
     <header class="post__header">
+        @if ($post->pinned)
+            <i
+                class="{{ config('other.font-awesome') }} fa-thumbtack post__pin"
+                title="Pinned"
+            ></i>
+        @endif
+
         <time
             class="post__datetime"
             datetime="{{ $post->created_at }}"

@@ -1357,6 +1357,7 @@ CREATE TABLE `posts` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `anon` tinyint(1) NOT NULL DEFAULT '0',
+  `pinned` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` int unsigned NOT NULL,
@@ -1365,6 +1366,7 @@ CREATE TABLE `posts` (
   KEY `fk_posts_topics1_idx` (`topic_id`),
   KEY `posts_created_at_index` (`created_at`),
   KEY `posts_user_id_foreign` (`user_id`),
+  KEY `posts_pinned_topic_id_index` (`pinned`,`topic_id`),
   CONSTRAINT `posts_topic_id_foreign` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `posts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3128,3 +3130,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (376,'2026_02_03_01
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (377,'2026_02_04_184040_combine_user_audibles_echoes',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (378,'2026_02_18_023757_change_donation_dates_to_timestamps',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (379,'2026_03_10_033755_migrate_request_bounty_created_at_to_updated_at',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2026_04_22_061705_add_pinned_column_to_posts',1);
