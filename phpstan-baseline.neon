@@ -412,6 +412,18 @@ parameters:
 			message: '#^Anonymous function should return Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\> but returns Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\TmdbCredit\>\.$#'
 			identifier: return.type
 			count: 2
+			path: app/Http/Livewire/TmdbPersonCredit.php
+
+		-
+			message: '#^Get hook for property App\\Http\\Livewire\\TmdbPersonCredit\:\:\$medias should return Illuminate\\Pagination\\LengthAwarePaginator\<int, App\\Models\\TmdbMovie\|App\\Models\\TmdbTv\|null\> but returns Illuminate\\Pagination\\LengthAwarePaginator\<int, App\\Models\\TmdbMovie\|App\\Models\\TmdbTv\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Livewire/TmdbPersonCredit.php
+
+		-
+			message: '#^Anonymous function should return Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\> but returns Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\TmdbCredit\>\.$#'
+			identifier: return.type
+			count: 2
 			path: app/Http/Livewire/TmdbPersonSearch.php
 
 		-
