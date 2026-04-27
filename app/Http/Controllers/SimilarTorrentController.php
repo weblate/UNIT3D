@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\Occupation;
 use App\Models\Category;
 use App\Models\IgdbGame;
 use App\Models\PersonalFreeleech;
@@ -45,7 +46,9 @@ class SimilarTorrentController extends Controller
                 $meta = TmdbMovie::query()
                     ->with([
                         'genres',
-                        'credits' => ['person', 'occupation'],
+                        'credits' => fn ($query) => $query
+                            ->where('occupation_id', '!=', Occupation::ACTOR)
+                            ->with(['person:id,still,name', 'occupation']),
                         'companies',
                         'collections.movies',
                     ])
@@ -61,7 +64,9 @@ class SimilarTorrentController extends Controller
                 $meta = TmdbTv::query()
                     ->with([
                         'genres',
-                        'credits' => ['person', 'occupation'],
+                        'credits' => fn ($query) => $query
+                            ->where('occupation_id', '!=', Occupation::ACTOR)
+                            ->with(['person:id,still,name', 'occupation']),
                         'companies',
                         'networks'
                     ])
