@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\ModerationStatus;
+use App\Enums\Occupation;
 use App\Helpers\Bencode;
 use App\Helpers\MediaInfo;
 use App\Helpers\TorrentHelper;
@@ -101,7 +102,9 @@ class TorrentController extends Controller
                 'keywords',
                 'movie' => [
                     'genres',
-                    'credits' => ['person', 'occupation'],
+                    'credits' => fn ($query) => $query
+                        ->where('occupation_id', '!=', Occupation::ACTOR)
+                        ->with(['person:id,still,name', 'occupation']),
                     'companies',
                     'collections.movies' => fn ($query) => $query->withMin('torrents', 'category_id')->has('torrents'),
                     'recommendedMovies'  => fn ($query) => $query->withMin('torrents', 'category_id')->has('torrents'),
@@ -112,7 +115,9 @@ class TorrentController extends Controller
                 'type',
                 'tv' => [
                     'genres',
-                    'credits' => ['person', 'occupation'],
+                    'credits' => fn ($query) => $query
+                        ->where('occupation_id', '!=', Occupation::ACTOR)
+                        ->with(['person:id,still,name', 'occupation']),
                     'companies',
                     'networks',
                     'recommendedTv' => fn ($query) => $query->withMin('torrents', 'category_id')->has('torrents'),
