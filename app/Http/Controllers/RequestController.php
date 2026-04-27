@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\Occupation;
 use App\Http\Requests\StoreTorrentRequestRequest;
 use App\Http\Requests\UpdateTorrentRequestRequest;
 use App\Models\Category;
@@ -66,7 +67,9 @@ class RequestController extends Controller
                 ],
                 'movie' => [
                     'genres',
-                    'credits' => ['person', 'occupation'],
+                    'credits' => fn ($query) => $query
+                        ->where('occupation_id', '!=', Occupation::ACTOR)
+                        ->with(['person:id,still,name', 'occupation']),
                     'companies',
                     'collections.movies'
                 ],
@@ -74,7 +77,9 @@ class RequestController extends Controller
                 'torrent',
                 'tv' => [
                     'genres',
-                    'credits' => ['person', 'occupation'],
+                    'credits' => fn ($query) => $query
+                        ->where('occupation_id', '!=', Occupation::ACTOR)
+                        ->with(['person:id,still,name', 'occupation']),
                     'companies',
                     'networks',
                 ],
