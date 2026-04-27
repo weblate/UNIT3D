@@ -197,6 +197,13 @@
                     <li x-bind="tabButton" data-tab="list">List</li>
                 </menu>
                 <div class="dialog__form" x-bind="tabPanel" data-tab="hierarchy" style="gap: 0">
+                    @if ($torrent->files->count() >= 5000)
+                        <div style="padding-bottom: 12px; color: red">
+                            Only the first 5000 files are shown. Download the .torrent file to view
+                            the full contents.
+                        </div>
+                    @endif
+
                     @if ($torrent->folder !== null)
                         <span
                             style="
@@ -237,6 +244,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($torrent->files->count() >= 5000)
+                                <tr>
+                                    <td colspan="3" style="padding-bottom: 12px; color: red">
+                                        Only the first 5000 files are shown. Download the .torrent
+                                        file to view the full contents.
+                                    </td>
+                                </tr>
+                            @endif
+
                             @foreach ($torrent->files as $index => $file)
                                 <tr>
                                     <td style="text-align: right">{{ $index + 1 }}</td>

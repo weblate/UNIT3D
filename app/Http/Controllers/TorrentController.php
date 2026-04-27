@@ -92,7 +92,6 @@ class TorrentController extends Controller
                 'comments',
                 'category',
                 'featured',
-                'files',
                 'game' => [
                     'genres',
                     'companies',
@@ -169,6 +168,8 @@ class TorrentController extends Controller
                 ])
             )
             ->findOrFail($id);
+
+        $torrent->setRelation('files', $torrent->files()->limit(5000)->get());
 
         $fileTree = [];
 
