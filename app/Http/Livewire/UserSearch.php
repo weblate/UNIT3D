@@ -99,7 +99,7 @@ class UserSearch extends Component
             ->when($this->groupId !== null, fn ($query) => $query->where('group_id', '=', $this->groupId))
             ->when($this->show === true, fn ($query) => $query->withTrashed())
             ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            ->paginate(min($this->perPage, 100));
     }
 
     /**

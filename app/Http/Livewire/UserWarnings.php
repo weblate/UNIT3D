@@ -74,7 +74,7 @@ class UserWarnings extends Component
                 fn ($query) => $query->orderByDesc('active')->orderByDesc('created_at'),
                 fn ($query) => $query->orderBy($this->sortField, $this->sortDirection),
             )
-            ->paginate($this->perPage);
+            ->paginate(min($this->perPage, 100));
     }
 
     final protected int $automatedWarningsCount {

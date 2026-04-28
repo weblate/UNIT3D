@@ -76,7 +76,7 @@ class LeakerSearch extends Component
             ->groupBy('history.user_id')
             ->when($this->agent !== '', fn ($query) => $query->where('agent', 'LIKE', $this->agent))
             ->when($this->sortField !== '', fn ($query) => $query->orderBy($this->sortField, $this->sortDirection))
-            ->paginate($this->perPage);
+            ->paginate(min($this->perPage, 100));
     }
 
     final protected int $torrentIdCount {
