@@ -75,7 +75,7 @@ class UserNotes extends Component
         get => Note::query()
             ->with('staff', 'staff.group')
             ->where('user_id', '=', $this->user->id)
-            ->paginate($this->perPage);
+            ->paginate(min($this->perPage, 100));
     }
 
     final public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application

@@ -59,7 +59,7 @@ class MissingMediaSearch extends Component
             ->withCount(['requests' => fn ($query) => $query->whereNull('torrent_id')->whereDoesntHave('claim')])
             ->withMin('torrents', 'category_id')
             ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            ->paginate(min($this->perPage, 100));
     }
 
     /**
