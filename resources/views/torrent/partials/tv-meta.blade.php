@@ -228,7 +228,7 @@
     </ul>
     <p class="meta__description">{{ $meta?->overview }}</p>
     <div class="meta__chips">
-        <livewire:work-tmdb-actor-credits :work="$meta->withoutRelations()" />
+        <livewire:work-tmdb-actor-credits :work="$meta?->withoutRelations()" />
         <section class="meta__chip-container" title="Crew">
             <h2 class="meta__heading">Crew</h2>
             @foreach ($meta?->credits?->sortBy('occupation.position') ?? [] as $credit)

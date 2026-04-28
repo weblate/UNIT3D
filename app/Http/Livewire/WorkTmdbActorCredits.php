@@ -24,7 +24,7 @@ use Livewire\Component;
 
 class WorkTmdbActorCredits extends Component
 {
-    public TmdbMovie|TmdbTv $work;
+    public TmdbMovie|TmdbTv|null $work = null;
 
     public int $page = 1;
 
@@ -37,7 +37,7 @@ class WorkTmdbActorCredits extends Component
      * @var Collection<int, \App\Models\TmdbCredit>|null
      */
     final protected ?Collection $credits {
-        get => match ($this->work::class) {
+        get => $this->work === null ? null : match ($this->work::class) {
             TmdbMovie::class => $this->work
                 ->credits()
                 ->with(['person:id,still,name', 'occupation'])

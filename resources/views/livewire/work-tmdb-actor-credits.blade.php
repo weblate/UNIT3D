@@ -1,7 +1,7 @@
 <section class="meta__chip-container">
     <h2 class="meta__heading">Cast</h2>
     @island('actors')
-        @foreach ($this->credits as $credit)
+        @foreach ($this->credits ?? [] as $credit)
             <article class="meta-chip-wrapper">
                 <a
                     href="{{ route('mediahub.persons.show', ['id' => $credit->person->id, 'occupationId' => $credit->occupation_id]) }}"
