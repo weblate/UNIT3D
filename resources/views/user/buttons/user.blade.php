@@ -306,9 +306,9 @@
                 @endif
 
                 <li class="nav-tabV2">
-                    <a class="nav-tab__link" popovertarget="user-download-torrents">
+                    <button class="nav-tab__link" popovertarget="user-download-torrents">
                         Download torrent files
-                    </a>
+                    </button>
 
                     <dialog id="user-download-torrents" class="dialog" popover>
                         <h3 class="dialog__heading">Download torrent files</h3>
