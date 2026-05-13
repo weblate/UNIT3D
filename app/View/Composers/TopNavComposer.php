@@ -7,7 +7,6 @@ namespace App\View\Composers;
 use App\Enums\ModerationStatus;
 use App\Models\Donation;
 use App\Models\Giveaway;
-use App\Models\Page;
 use App\Models\Report;
 use App\Models\Scopes\ApprovedScope;
 use App\Models\Ticket;
@@ -25,11 +24,6 @@ class TopNavComposer
         $user = auth()->user()->load('group');
 
         $view->with([
-            'pages' => cache()->flexible(
-                'cached-pages',
-                [3600, 3600 * 2],
-                fn () => Page::query()->select(['id', 'name', 'created_at'])->take(6)->get()
-            ),
             'hasUnreadTicket' => Ticket::query()
                 ->when(
                     $user->group->is_modo,
