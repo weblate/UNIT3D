@@ -23,6 +23,7 @@ use App\Console\Commands\AutoCorrectHistory;
 use App\Console\Commands\AutoDeactivateWarning;
 use App\Console\Commands\AutoDeleteStoppedPeers;
 use App\Console\Commands\AutoDisableInactiveUsers;
+use App\Console\Commands\AutoExpireApikeys;
 use App\Console\Commands\AutoFlushPeers;
 use App\Console\Commands\AutoGroup;
 use App\Console\Commands\AutoHighspeedTag;
@@ -111,6 +112,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(AutoRemoveExpiredDonors::class)->hourly();
         $schedule->command(AutoRemoveReseeds::class)->daily();
         $schedule->command(AutoRewardUploadContestPrize::class)->daily();
+        $schedule->command(AutoExpireApikeys::class)->daily();
         // $schedule->command(AutoBanDisposableUsers::class)->weekends();
         $schedule->command(CleanupCommand::class)->daily();
         $schedule->command(BackupCommand::class, ['--only-db'])->daily();
