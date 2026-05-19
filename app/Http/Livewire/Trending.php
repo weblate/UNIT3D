@@ -91,7 +91,7 @@ class Trending extends Component
             };
 
             return cache()->flexible(
-                'trending-'.$this->interval.'-'.($this->from ?? '').'-'.($this->until ?? '').'-'.$this->metaType,
+                'trending-'.$this->interval.'-'.$this->from.'-'.$this->until.'-'.$this->metaType,
                 [1800, 7200],
                 fn () => Torrent::query()
                     ->with('movie', 'tv')

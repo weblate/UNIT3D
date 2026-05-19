@@ -206,7 +206,9 @@ trait TorrentMeta
                                     /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                     krsort($packOrSpecialOrSeasons, SORT_NATURAL);
 
+                                    /** @phpstan-ignore foreach.nonIterable (Phpstan is incorrectly treating the array shape as a general array) */
                                     foreach ($packOrSpecialOrSeasons as &$specialTorrents) {
+                                        /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                         self::sortTorrentTypes($specialTorrents);
                                     }
 
@@ -215,17 +217,22 @@ trait TorrentMeta
                                     /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                     krsort($packOrSpecialOrSeasons, SORT_NATURAL);
 
+                                    /** @phpstan-ignore foreach.nonIterable (Phpstan is incorrectly treating the array shape as a general array) */
                                     foreach ($packOrSpecialOrSeasons as &$season) {
                                         foreach ($season as $packOrEpisodesType => &$packOrEpisodes) {
                                             switch ($packOrEpisodesType) {
                                                 case 'Season Pack':
+                                                    /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                                     self::sortTorrentTypes($packOrEpisodes);
 
                                                     break;
                                                 case 'Episodes':
+                                                    /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                                     krsort($packOrEpisodes, SORT_NATURAL);
 
+                                                    /** @phpstan-ignore foreach.nonIterable (Phpstan is incorrectly treating the array shape as a general array) */
                                                     foreach ($packOrEpisodes as &$episodeTorrents) {
+                                                        /** @phpstan-ignore argument.type (Phpstan is incorrectly treating the array shape as a general array) */
                                                         self::sortTorrentTypes($episodeTorrents);
                                                     }
 

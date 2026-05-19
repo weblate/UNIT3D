@@ -181,7 +181,6 @@ class TorrentController extends Controller
             for ($i = 0; $i < \count($parts) - 1; $i++) {
                 $part = $parts[$i];
 
-                /** @phpstan-ignore function.impossibleType (PHPStan doesn't recognize that $current might not be empty in subsequent loops)*/
                 if (!\array_key_exists($part, $current)) {
                     $current[$part] = [
                         'type'     => 'directory',
