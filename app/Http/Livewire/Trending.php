@@ -46,6 +46,12 @@ class Trending extends Component
     #[Validate('sometimes|date_format:Y-m-d')]
     public string $from = '' {
         set(string $value) {
+            if ($value === '') {
+                $this->from = '';
+
+                return;
+            }
+
             try {
                 $this->from = Carbon::parse($value)->format('Y-m-d');
             } catch (Throwable) {
@@ -58,6 +64,12 @@ class Trending extends Component
     #[Validate('sometimes|date_format:Y-m-d')]
     public string $until = '' {
         set(string $value) {
+            if ($value === '') {
+                $this->until = '';
+
+                return;
+            }
+
             try {
                 $this->until = Carbon::parse($value)->format('Y-m-d');
             } catch (Throwable) {
