@@ -46,7 +46,7 @@ class BountyController extends Controller
 
         $user->decrement('seedbonus', $request->integer('seedbonus'));
 
-        $bounty = $torrentRequest->bounties()->create(['user_id' => $user->id] + $request->validated());
+        $bounty = $torrentRequest->bounties()->create([...$request->validated(), 'user_id' => $user->id]);
 
         $torrentRequest->increment('bounty', $request->integer('seedbonus'));
 

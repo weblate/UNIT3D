@@ -78,9 +78,10 @@ class PlaylistController extends Controller
         }
 
         $playlist = Playlist::query()->create([
+            ...$request->validated(),
             'user_id'     => $request->user()->id,
             'cover_image' => $filename ?? null
-        ] + $request->validated());
+        ]);
 
         // Announce To Shoutbox
         if (!$playlist->is_private) {
@@ -169,7 +170,7 @@ class PlaylistController extends Controller
                 Storage::disk('playlist-images')->delete($playlist->cover_image);
             }
 
-            $playlist->update(['cover_image' => $filename] + $request->validated());
+            $playlist->update([...$request->validated(), 'cover_image' => $filename]);
         } else {
             $playlist->update($request->validated());
         }
