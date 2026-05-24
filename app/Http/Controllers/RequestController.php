@@ -140,9 +140,10 @@ class RequestController extends Controller
         $user->decrement('seedbonus', $request->bounty);
 
         $torrentRequest = TorrentRequest::query()->create([
+            ...$request->validated(),
             'user_id'   => $request->user()->id,
             'bumped_at' => now(),
-        ] + $request->validated());
+        ]);
 
         TorrentRequestBounty::query()->create([
             'user_id'     => $user->id,

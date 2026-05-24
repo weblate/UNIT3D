@@ -128,6 +128,7 @@ class TorrentController extends BaseController
 
         // Create the torrent (DB)
         $torrent = Torrent::query()->create([
+            ...$request->safe()->except(['torrent', 'featured']),
             'mediainfo'    => TorrentTools::anonymizeMediainfo($request->filled('mediainfo') ? $request->string('mediainfo') : null),
             'info_hash'    => Bencode::get_infohash($decodedTorrent),
             'file_name'    => $fileName,
@@ -138,7 +139,7 @@ class TorrentController extends BaseController
             'user_id'      => $user->id,
             'moderated_at' => now(),
             'moderated_by' => User::SYSTEM_USER_ID,
-        ] + $request->safe()->except(['torrent', 'featured']));
+        ]);
 
         // Populate the status/seeders/leechers/times_completed fields for the external tracker
         $torrent->refresh();

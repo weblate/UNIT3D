@@ -65,9 +65,10 @@ class ReportController extends Controller
         }
 
         $report->update([
+            ...$request->validated(),
             'solved_by' => $staff->id,
             'solved_at' => now(),
-        ] + $request->validated());
+        ]);
 
         $conversation = Conversation::query()->create(['subject' => 'Your Report Has A New Verdict']);
 

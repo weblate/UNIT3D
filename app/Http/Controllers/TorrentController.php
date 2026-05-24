@@ -554,6 +554,7 @@ class TorrentController extends Controller
         Storage::disk('torrent-files')->put($fileName, Bencode::bencode($decodedTorrent));
 
         $torrent = Torrent::query()->create([
+            ...$request->safe()->except(['torrent']),
             'mediainfo'    => TorrentTools::anonymizeMediainfo($request->filled('mediainfo') ? $request->string('mediainfo') : null),
             'info_hash'    => Bencode::get_infohash($decodedTorrent),
             'file_name'    => $fileName,
@@ -564,7 +565,7 @@ class TorrentController extends Controller
             'user_id'      => $user->id,
             'moderated_at' => now(),
             'moderated_by' => User::SYSTEM_USER_ID,
-        ] + $request->safe()->except(['torrent']));
+        ]);
 
         // Populate the status/seeders/leechers/times_completed fields for the external tracker
         $torrent->refresh();
