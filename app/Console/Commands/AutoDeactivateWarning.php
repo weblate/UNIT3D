@@ -61,15 +61,13 @@ class AutoDeactivateWarning extends Command
                             ->where('history.seedtime', '>=', config('hitrun.seedtime'))
                     )
             )
-            ->chunkById(100, function ($warnings) use (&$usersWithExpiredWarnings): void {
-                foreach ($warnings as $warning) {
-                    // Set Records Active To 0 in warnings table
-                    $warning->update(['active' => false]);
+            ->each(function ($warning) use (&$usersWithExpiredWarnings): void {
+                // Set Records Active To 0 in warnings table
+                $warning->update(['active' => false]);
 
-                    // Add user to usersWithExpiredWarnings array
-                    $usersWithExpiredWarnings[$warning->user_id] = $warning->user;
-                }
-            });
+                // Add user to usersWithExpiredWarnings array
+                $usersWithExpiredWarnings[$warning->user_id] = $warning->user;
+            }, 100);
 
         // Send a single notification for each user with expired warnings
         foreach ($usersWithExpiredWarnings as $user) {
@@ -83,15 +81,13 @@ class AutoDeactivateWarning extends Command
             ->groupBy('user_id')
             ->having('value', '<', config('hitrun.max_warnings'))
             ->whereRelation('user', 'can_download', '=', false)
-            ->chunkById(100, function ($warnings): void {
-                foreach ($warnings as $warning) {
-                    $warning->user->update(['can_download' => 1]);
+            ->eachById(function ($warning): void {
+                $warning->user->update(['can_download' => 1]);
 
-                    cache()->forget('user:'.$warning->user->passkey);
+                cache()->forget('user:'.$warning->user->passkey);
 
-                    Unit3dAnnounce::addUser($warning->user);
-                }
-            }, 'user_id');
+                Unit3dAnnounce::addUser($warning->user);
+            }, 100, 'user_id');
 
         $this->comment('Automated warning deactivation command complete');
     }
