@@ -100,6 +100,18 @@ class InviteTreeController extends Controller
             ->addBinding(User::SYSTEM_USER_ID, 'join')
             ->with([
                 'receiver' => fn ($query) => $query
+                    ->select([
+                        'id',
+                        'group_id',
+                        'username',
+                        'uploaded',
+                        'downloaded',
+                        'created_at',
+                        'last_action',
+                        'is_donor',
+                        'icon',
+                        'is_lifetime',
+                    ])
                     ->withTrashed()
                     ->with('group')
                     ->withAvg(['history' => fn ($query) => $query->withTrashed()], 'seedtime')
