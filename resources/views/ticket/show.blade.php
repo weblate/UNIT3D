@@ -20,7 +20,7 @@
 @section('main')
     <section class="panelV2">
         <h2 class="panel__heading">{{ $ticket->subject }}</h2>
-        {{-- format-ignore-start --}}<div class="panel__body" style="white-space: pre-wrap">{{ $ticket->body }}</div>{{-- format-ignore-end --}}
+        <div class="panel__body bbcode-rendered">@bbcode($ticket->body)</div>
     </section>
     @if ($user->group->is_modo)
         <section class="panelV2">
