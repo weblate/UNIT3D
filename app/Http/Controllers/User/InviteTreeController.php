@@ -98,6 +98,7 @@ class InviteTreeController extends Controller
             ->addBinding(User::SYSTEM_USER_ID, 'join')
             ->addBinding(User::SYSTEM_USER_ID, 'join')
             ->addBinding(User::SYSTEM_USER_ID, 'join')
+            ->whereDoesntHave('application')
             ->with([
                 'receiver' => fn ($query) => $query
                     ->withTrashed()
