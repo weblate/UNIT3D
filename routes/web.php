@@ -27,8 +27,6 @@ use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-use Laravel\Fortify\RoutePath;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,19 +48,6 @@ if (config('unit3d.root_url_override')) {
 Route::middleware(SetLanguage::class)->group(function (): void {
     /*
     |---------------------------------------------------------------------------------
-    | Laravel Fortify Route Overrides
-    | Don't update Fortify without first making sure this override works.
-    |---------------------------------------------------------------------------------
-    */
-
-    Route::middleware(RedirectIfAuthenticated::class.':'.config('fortify.guard'))->group(function (): void {
-        Route::get(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'create'])
-            ->middleware(ThrottleRequestsWithRedis::using(config('fortify.limiters.fortify-login-get')))
-            ->name('login');
-    });
-
-    /*
-    |---------------------------------------------------------------------------------
     | Website (Not Authorized) (Alpha Ordered)
     |---------------------------------------------------------------------------------
     */
@@ -77,6 +62,14 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\NewPasswordController::class, 'create'])->name('password.reset');
         Route::post('/reset-password', [App\Http\Controllers\Auth\NewPasswordController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::RESET_PASSWORD))->name('password.update');
 
+        // Login
+        Route::get('/login', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'create'])->name('login');
+        Route::post('/login', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'store'])->name('login.store')->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::LOGIN));
+
+        // Two factor
+        Route::get('/two-factor-challenge', [Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController::class, 'create'])->name('two-factor.login');
+        Route::post('/two-factor-challenge', [Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::TWO_FACTOR))->name('two-factor.login.store');
+
         // Registration
         Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('registration.create');
         Route::post('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::REGISTER))->name('registration.store');
@@ -90,6 +83,9 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         Route::get('/email/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'create'])->name('verification.notice');
         Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->middleware(ValidateSignature::class)->name('verification.verify');
         Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::EMAIL_VERIFICATION))->name('verification.send');
+
+        // Logout
+        Route::post('/logout', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'destroy'])->name('logout');
     });
 
     /*

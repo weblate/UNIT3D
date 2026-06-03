@@ -21,7 +21,7 @@
                 <form
                     class="auth-form__form"
                     method="POST"
-                    action="{{ route('two-factor.login') }}"
+                    action="{{ route('two-factor.login.store') }}"
                 >
                     @csrf
                     <a class="auth-form__branding" href="{{ route('home.index') }}">
