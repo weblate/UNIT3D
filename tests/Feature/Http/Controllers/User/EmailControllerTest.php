@@ -40,7 +40,10 @@ test('edit returns an ok response', function (): void {
     $user = User::factory(['two_factor_confirmed_at' => now()])->create();
 
     $response = $this->actingAs($user)
-        ->withSession(['auth.password_confirmed_at' => now()->unix()])
+        ->withSession([
+            'auth.password_confirmed_at'   => now()->unix(),
+            'auth.two_factor_confirmed_at' => now()->unix(),
+        ])
         ->get(route('users.email.edit', [$user]));
 
     $response->assertOk();
@@ -61,7 +64,10 @@ test('edit aborts with a 403', function (): void {
     ]);
 
     $response = $this->actingAs($authUser)
-        ->withSession(['auth.password_confirmed_at' => now()->unix()])
+        ->withSession([
+            'auth.password_confirmed_at'   => now()->unix(),
+            'auth.two_factor_confirmed_at' => now()->unix(),
+        ])
         ->get(route('users.email.edit', [$user]));
 
     $response->assertForbidden();
@@ -89,7 +95,10 @@ test('update returns an ok response', function (): void {
     $user = User::factory(['two_factor_confirmed_at' => now()])->create();
 
     $response = $this->actingAs($user)
-        ->withSession(['auth.password_confirmed_at' => now()->unix()])
+        ->withSession([
+            'auth.password_confirmed_at'   => now()->unix(),
+            'auth.two_factor_confirmed_at' => now()->unix(),
+        ])
         ->patch(route('users.email.update', [$user]), [
             'email' => fake()->unique()->freeEmail,
         ]);
@@ -111,7 +120,10 @@ test('update aborts with a 403', function (): void {
     ]);
 
     $response = $this->actingAs($authUser)
-        ->withSession(['auth.password_confirmed_at' => now()->unix()])
+        ->withSession([
+            'auth.password_confirmed_at'   => now()->unix(),
+            'auth.two_factor_confirmed_at' => now()->unix(),
+        ])
         ->patch(route('users.email.update', [$user]));
 
     $response->assertForbidden();
