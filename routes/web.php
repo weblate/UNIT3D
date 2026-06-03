@@ -569,7 +569,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Two-Factor Authentication
             Route::prefix('two-factor-auth')->name('two_factor_auth.')->group(function (): void {
-                Route::get('/edit', [App\Http\Controllers\User\TwoFactorAuthController::class, 'edit'])->name('edit');
+                Route::get('/edit', [App\Http\Controllers\User\TwoFactorAuthController::class, 'edit'])->name('edit')->middleware([Illuminate\Auth\Middleware\RequirePassword::using(null, 300), ConfirmTwoFactor::class]);
             });
 
             // Email
