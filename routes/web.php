@@ -72,13 +72,13 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         Route::post('/application', [App\Http\Controllers\Auth\ApplicationController::class, 'store'])->name('application.store');
 
         // Password resets
-        Route::get('/forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::FORGOT_PASSWORD))->name('password.request');
+        Route::get('/forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->name('password.request');
         Route::post('/forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::FORGOT_PASSWORD))->name('password.email');
-        Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\NewPasswordController::class, 'create'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::RESET_PASSWORD))->name('password.reset');
+        Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\NewPasswordController::class, 'create'])->name('password.reset');
         Route::post('/reset-password', [App\Http\Controllers\Auth\NewPasswordController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::RESET_PASSWORD))->name('password.update');
 
         // Registration
-        Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::REGISTER))->name('registration.create');
+        Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('registration.create');
         Route::post('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::REGISTER))->name('registration.store');
         // This redirect must be kept until all invite emails that use the old syntax have expired
         // Hack so that Fortify can be used (allows query parameters but not route parameters)
