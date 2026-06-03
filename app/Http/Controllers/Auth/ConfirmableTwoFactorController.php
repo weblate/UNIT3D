@@ -18,6 +18,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;
 
 class ConfirmableTwoFactorController extends Controller
@@ -36,6 +37,8 @@ class ConfirmableTwoFactorController extends Controller
     public function store(Request $request, ConfirmTwoFactorAuthentication $confirm): \Illuminate\Http\RedirectResponse
     {
         $confirm($request->user(), $request->input('code'));
+
+        $request->session()->put('auth.two_factor_confirmed_at', Date::now()->unix());
 
         return redirect()->intended();
     }
