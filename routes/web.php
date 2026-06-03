@@ -19,6 +19,7 @@ use App\Http\Middleware\CheckForAdmin;
 use App\Http\Middleware\CheckForModo;
 use App\Http\Middleware\CheckForOwner;
 use App\Http\Middleware\CheckIfBanned;
+use App\Http\Middleware\ConfirmTwoFactor;
 use App\Http\Middleware\SetLanguage;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -83,6 +84,14 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         Route::get('/email/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'create'])->name('verification.notice');
         Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->middleware(ValidateSignature::class)->name('verification.verify');
         Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::EMAIL_VERIFICATION))->name('verification.send');
+
+        // Password confirmation
+        Route::get('/confirm-password', [App\Http\Controllers\Auth\ConfirmablePasswordController::class, 'show'])->name('password.confirm');
+        Route::post('/confirm-password', [App\Http\Controllers\Auth\ConfirmablePasswordController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::CONFIRM_PASSWORD))->name('password.confirm.store');
+
+        // Two factor confirmation
+        Route::get('/confirm-two-factor', [App\Http\Controllers\Auth\ConfirmableTwoFactorController::class, 'show'])->name('two-factor.confirm');
+        Route::post('/confirm-two-factor', [App\Http\Controllers\Auth\ConfirmableTwoFactorController::class, 'store'])->middleware(ThrottleRequestsWithRedis::using(GlobalRateLimit::CONFIRM_TWO_FACTOR))->name('two-factor.confirm.store');
 
         // Logout
         Route::post('/logout', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -565,8 +574,8 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Email
             Route::prefix('email')->name('email.')->group(function (): void {
-                Route::get('/edit', [App\Http\Controllers\User\EmailController::class, 'edit'])->name('edit');
-                Route::patch('/', [App\Http\Controllers\User\EmailController::class, 'update'])->name('update');
+                Route::get('/edit', [App\Http\Controllers\User\EmailController::class, 'edit'])->name('edit')->middleware([Illuminate\Auth\Middleware\RequirePassword::using(null, 300), ConfirmTwoFactor::class]);
+                Route::patch('/', [App\Http\Controllers\User\EmailController::class, 'update'])->name('update')->middleware([Illuminate\Auth\Middleware\RequirePassword::using(null, 300), ConfirmTwoFactor::class]);
             });
 
             // Password
