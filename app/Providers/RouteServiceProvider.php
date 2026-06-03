@@ -100,6 +100,8 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for(GlobalRateLimit::RESET_PASSWORD, fn (Request $request) => Limit::perMinute(5)->by('reset-password'.$request->ip()));
         RateLimiter::for(GlobalRateLimit::REGISTER, fn (Request $request) => Limit::perMinute(5)->by('register'.$request->ip()));
         RateLimiter::for(GlobalRateLimit::EMAIL_VERIFICATION, fn (Request $request) => Limit::perMinute(5)->by('email-verification'.$request->user()->id));
+        RateLimiter::for(GlobalRateLimit::LOGIN, fn (Request $request) => Limit::perMinute(5)->by('login'.$request->ip()));
+        RateLimiter::for(GlobalRateLimit::TWO_FACTOR, fn (Request $request) => Limit::perMinute(5)->by('two-factor'.$request->session()->get('login.id')));
     }
 
     protected function removeIndexPhpFromUrl(): void

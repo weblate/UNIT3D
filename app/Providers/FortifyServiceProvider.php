@@ -22,11 +22,9 @@ use App\Models\Group;
 use App\Models\User;
 use App\Notifications\FailedLogin;
 use App\Services\Unit3dAnnounce;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -42,6 +40,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        Fortify::ignoreRoutes();
+
         // Handle redirects after successful login
         $this->app->instance(LoginResponse::class, new class () implements LoginResponse {
             public function toResponse($request): \Illuminate\Http\RedirectResponse
@@ -93,10 +93,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('login', fn (Request $request) => Limit::perMinute(5)->by('fortify-login'.$request->ip()));
-        RateLimiter::for('fortify-login-get', fn (Request $request) => Limit::perMinute(5)->by('fortify-login'.$request->ip()));
-        RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(5)->by('fortify-two-factor'.$request->session()->get('login.id')));
-
         Fortify::loginView(fn () => view('auth.login'));
         Fortify::twoFactorChallengeView(fn () => view('auth.two-factor-challenge'));
 
