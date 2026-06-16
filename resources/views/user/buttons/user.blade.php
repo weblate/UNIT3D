@@ -7,11 +7,16 @@
 
 <li class="nav-tab-menu">
     <a
-        class="{{ Route::is('users.show', 'users.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+        class="nav-tab--nontouch {{ Route::is('users.show', 'users.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
         href="{{ route('users.show', ['user' => $user]) }}"
     >
         {{ __('user.profile') }}
     </a>
+    <button
+        class="nav-tab--touch {{ Route::is('users.show', 'users.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+    >
+        {{ __('user.profile') }}
+    </button>
     <ul class="nav-tab-menu__items">
         <li class="{{ Route::is('users.show') ? 'nav-tab--active' : 'nav-tavV2' }}">
             <a
@@ -109,11 +114,16 @@
 @if ($isProfileOwner || $isModo)
     <li class="nav-tab-menu">
         <a
-            class="{{ Route::is('users.general_settings.edit', 'users.email.edit', 'users.password.edit', 'users.passkeys.index', 'users.rsskeys.index', 'users.apikeys.index', 'users.two_factor_auth.edit', 'users.privacy_settings.edit', 'users.notification_settings.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+            class="nav-tab--nontouch {{ Route::is('users.general_settings.edit', 'users.email.edit', 'users.password.edit', 'users.passkeys.index', 'users.rsskeys.index', 'users.apikeys.index', 'users.two_factor_auth.edit', 'users.privacy_settings.edit', 'users.notification_settings.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
             href="{{ route('users.general_settings.edit', ['user' => $user]) }}"
         >
             {{ __('user.settings') }}
         </a>
+        <button
+            class="nav-tab--touch {{ Route::is('users.general_settings.edit', 'users.email.edit', 'users.password.edit', 'users.passkeys.index', 'users.rsskeys.index', 'users.apikeys.index', 'users.two_factor_auth.edit', 'users.privacy_settings.edit', 'users.notification_settings.edit') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+        >
+            {{ __('user.settings') }}
+        </button>
         <ul class="nav-tab-menu__items">
             @if ($isProfileOwner)
                 <li
@@ -208,15 +218,20 @@
     <li class="nav-tab-menu">
         @if ($isProfileOwner || $isModo)
             <a
-                class="{{ Route::is('users.history.index', 'users.torrents.index', 'users.peers.index', 'users.resurrections.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+                class="nav-tab--nontouch {{ Route::is('users.history.index', 'users.torrents.index', 'users.peers.index', 'users.resurrections.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
                 href="{{ route('users.history.index', ['user' => $user]) }}"
             >
                 {{ __('torrent.torrents') }}
             </a>
-        @else
-            <span tabindex="-1" class="nav-tab__link">
+            <button
+                class="nav-tab--touch {{ Route::is('users.history.index', 'users.torrents.index', 'users.peers.index', 'users.resurrections.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+            >
                 {{ __('torrent.torrents') }}
-            </span>
+            </button>
+        @else
+            <button class="nav-tab__link">
+                {{ __('torrent.torrents') }}
+            </button>
         @endif
         <ul class="nav-tab-menu__items">
             @if ($isProfileOwner || $isModo)
@@ -361,12 +376,11 @@
 @endif
 
 <li class="nav-tab-menu">
-    <span
-        tabindex="-1"
+    <button
         class="{{ Route::is('users.achievements.*', 'users.topics.index', 'users.posts.index', 'users.followers.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
     >
         {{ __('forum.activity') }}
-    </span>
+    </button>
     <ul class="nav-tab-menu__items">
         @if (auth()->user()->isAllowed($user, 'achievement', 'show_achievement'))
             <li
@@ -439,11 +453,16 @@
 @if ($isProfileOwner || $isModo)
     <li class="nav-tab-menu">
         <a
-            class="{{ Route::is('users.earnings.index', 'users.transactions.create', 'users.gifts.index', 'users.gifts.create', 'users.post_tips.index', 'users.torrent_tips.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+            class="nav-tab--nontouch {{ Route::is('users.earnings.index', 'users.transactions.create', 'users.gifts.index', 'users.gifts.create', 'users.post_tips.index', 'users.torrent_tips.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
             href="{{ route('users.earnings.index', ['user' => $user]) }}"
         >
             {{ __('bon.bonus') }} {{ __('bon.points') }}
         </a>
+        <button
+            class="nav-tab--touch {{ Route::is('users.earnings.index', 'users.transactions.create', 'users.gifts.index', 'users.gifts.create', 'users.post_tips.index', 'users.torrent_tips.index') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
+        >
+            {{ __('bon.bonus') }} {{ __('bon.points') }}
+        </button>
         <ul class="nav-tab-menu__items">
             <li class="{{ Route::is('users.earnings.index') ? 'nav-tab--active' : 'nav-tavV2' }}">
                 <a
@@ -498,12 +517,11 @@
 
 @if ($isProfileOwner || $isModo)
     <li class="nav-tab-menu">
-        <span
-            tabindex="-1"
+        <button
             class="{{ Route::is('users.wishes.*', 'users.seedboxes.*', 'users.invites.*') ? 'nav-tab--active__link' : 'nav-tab__link' }}"
         >
             {{ __('common.other') }}
-        </span>
+        </button>
         <ul class="nav-tab-menu__items">
             @if ($isProfileOwner || $isModo)
                 <li
