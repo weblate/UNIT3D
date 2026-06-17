@@ -93,7 +93,7 @@ class TorrentResource extends JsonResource
             'id'         => (string) $this->id,
             'attributes' => [
                 'meta' => [
-                    'poster' => isset($this->meta->poster) ? tmdb_image('poster_small', $this->meta->poster) : 'https://via.placeholder.com/90x135',
+                    'poster' => isset($this->meta->poster) ? tmdb_image('poster_small', $this->meta->poster) : null,
                     'genres' => isset($this->meta->genres) ? collect($this->meta->genres)->pluck('name')->implode(', ') : '',
                 ],
                 'name'         => $this->name,
