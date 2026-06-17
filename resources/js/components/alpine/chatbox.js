@@ -105,15 +105,6 @@ const channelHandler = {
                 const messageTimeout = setTimeout(() => context.activePeer.delete(username), 15000);
                 context.activePeer.set(username, messageTimeout);
             });
-
-        context.channel.error((error) => {
-            console.error('Socket error:', error);
-            context.state.ui.error = 'Connection lost. Trying to reconnect...';
-
-            setTimeout(() => {
-                this.setupRoom(context.state.chat.room, context);
-            }, 5000);
-        });
     },
 };
 
