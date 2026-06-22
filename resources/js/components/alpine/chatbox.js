@@ -566,13 +566,6 @@ document.addEventListener('alpine:init', () => {
                     this.activePeer.set(username, messageTimeout);
                 }
             });
-
-            this.chatter.error((error) => {
-                console.error('Chatter connection error:', error);
-                setTimeout(() => {
-                    this.listenForChatter();
-                }, 5000);
-            });
         },
 
         listenForEvents() {
