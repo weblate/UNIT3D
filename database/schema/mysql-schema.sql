@@ -830,12 +830,13 @@ CREATE TABLE `history` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `completed_at` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`,`torrent_id`),
-  KEY `history_user_id_foreign` (`user_id`),
-  KEY `history_immune_index` (`immune`),
-  KEY `history_hitrun_index` (`hitrun`),
-  KEY `history_user_id_torrent_id_index` (`user_id`,`torrent_id`),
   KEY `history_idx_prewa_hitru_immun_activ_actua` (`prewarned_at`,`hitrun`,`immune`,`active`,`actual_downloaded`),
   KEY `history_torrent_id_completed_at_created_at_index` (`torrent_id`,`completed_at`,`created_at`),
+  KEY `history_completed_at_index` (`completed_at`),
+  KEY `history_created_at_index` (`created_at`),
+  KEY `history_deleted_at_user_id_created_at_index` (`deleted_at`,`user_id`,`created_at`),
+  KEY `history_torrent_id_index` (`torrent_id`),
+  KEY `history_active_deleted_at_updated_at_index` (`active`,`deleted_at`,`updated_at`),
   CONSTRAINT `history_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `torrents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `history_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3131,3 +3132,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (377,'2026_02_04_18
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (378,'2026_02_18_023757_change_donation_dates_to_timestamps',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (379,'2026_03_10_033755_migrate_request_bounty_created_at_to_updated_at',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2026_04_22_061705_add_pinned_column_to_posts',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2026_06_26_132559_update_history_indexes',1);
