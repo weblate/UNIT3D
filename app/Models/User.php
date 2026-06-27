@@ -69,7 +69,6 @@ use AllowDynamicProperties;
  * @property bool                            $is_donor
  * @property bool                            $is_lifetime
  * @property string|null                     $remember_token
- * @property string|null                     $api_token
  * @property \Illuminate\Support\Carbon|null $last_login
  * @property \Illuminate\Support\Carbon|null $last_action
  * @property \Illuminate\Support\Carbon|null $disabled_at
@@ -104,7 +103,6 @@ final class User extends Authenticatable implements MustVerifyEmail
         'passkey',
         'rsskey',
         'remember_token',
-        'api_token',
         'two_factor_secret',
         'two_factor_recovery_codes',
         'two_factor_confirmed_at',

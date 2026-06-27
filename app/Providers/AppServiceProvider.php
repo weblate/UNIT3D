@@ -19,6 +19,7 @@ namespace App\Providers;
 use App\Helpers\ByteUnits;
 use App\Helpers\HiddenCaptcha;
 use App\Interfaces\ByteUnitsInterface;
+use App\Models\Apikey;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\View\Composers\FooterComposer;
@@ -105,12 +106,24 @@ class AppServiceProvider extends ServiceProvider
 
         Auth::viaRequest('rsskey', fn (Request $request) => User::query()->where('rsskey', '=', $request->route('rsskey'))->first());
 
-        Auth::viaRequest('apikey', function (Request $request) {
-            if ($request->bearerToken()) {
-                return User::query()
-                    ->where('api_token', '=', $request->bearerToken())
-                    ->first();
+        Auth::viaRequest('apikey', function (Request $request): ?User {
+            if (!$request->bearerToken()) {
+                return null;
             }
+
+            $apikey = Apikey::query()
+                ->where('content', '=', $request->bearerToken())
+                ->first();
+
+            if ($apikey === null) {
+                return null;
+            }
+
+            $apikey->update([
+                'last_used_at' => now(),
+            ]);
+
+            return $apikey->user;
         });
 
         Context::add('url', $request->url());

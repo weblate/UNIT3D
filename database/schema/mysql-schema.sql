@@ -67,11 +67,21 @@ DROP TABLE IF EXISTS `apikeys`;
 CREATE TABLE `apikeys` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `can_search` tinyint(1) NOT NULL,
+  `can_download` tinyint(1) NOT NULL,
+  `can_upload` tinyint(1) NOT NULL,
+  `can_view_user` tinyint(1) NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `reminded_expiry_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `apikeys_user_id_foreign` (`user_id`),
+  KEY `apikeys_content_index` (`content`),
+  KEY `apikeys_deleted_at_expires_at_index` (`deleted_at`,`expires_at`),
   CONSTRAINT `apikeys_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2601,7 +2611,6 @@ CREATE TABLE `users` (
   `is_donor` tinyint(1) NOT NULL DEFAULT '0',
   `is_lifetime` tinyint(1) NOT NULL DEFAULT '0',
   `remember_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `api_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
   `last_action` datetime DEFAULT NULL,
   `disabled_at` datetime DEFAULT NULL,
@@ -2616,7 +2625,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_passkey_unique` (`passkey`),
   UNIQUE KEY `users_rsskey_unique` (`rsskey`),
-  UNIQUE KEY `users_api_token_unique` (`api_token`),
   KEY `users_read_rules_index` (`read_rules`),
   KEY `users_deleted_at_index` (`deleted_at`),
   KEY `users_deleted_by_foreign` (`deleted_by`),
@@ -3134,3 +3142,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (379,'2026_03_10_03
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2026_04_22_061705_add_pinned_column_to_posts',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2026_06_26_132559_update_history_indexes',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (382,'2026_06_27_065215_rename_bounty_requests_id',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (383,'2026_06_27_193400_add_apikey_permissions',1);

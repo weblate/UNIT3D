@@ -599,7 +599,8 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             // Apikey
             Route::prefix('apikeys')->name('apikeys.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\User\ApikeyController::class, 'index'])->name('index');
-                Route::patch('/', [App\Http\Controllers\User\ApikeyController::class, 'update'])->name('update');
+                Route::post('/', [App\Http\Controllers\User\ApikeyController::class, 'store'])->name('store');
+                Route::delete('/{apikey}', [App\Http\Controllers\User\ApikeyController::class, 'destroy'])->name('destroy');
             });
 
             // Post tips
