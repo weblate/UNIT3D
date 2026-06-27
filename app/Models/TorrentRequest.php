@@ -230,7 +230,7 @@ final class TorrentRequest extends Model
      */
     public function bounties(): HasMany
     {
-        return $this->hasMany(TorrentRequestBounty::class, 'requests_id', 'id');
+        return $this->hasMany(TorrentRequestBounty::class, 'request_id');
     }
 
     /**

@@ -28,7 +28,7 @@ use AllowDynamicProperties;
  * @property int                             $id
  * @property int                             $user_id
  * @property string                          $seedbonus
- * @property int                             $requests_id
+ * @property int                             $request_id
  * @property bool                            $anon
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -88,6 +88,6 @@ final class TorrentRequestBounty extends Model
      */
     public function request(): BelongsTo
     {
-        return $this->belongsTo(TorrentRequest::class, 'requests_id');
+        return $this->belongsTo(TorrentRequest::class);
     }
 }

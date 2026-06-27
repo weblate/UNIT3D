@@ -146,10 +146,10 @@ class RequestController extends Controller
         ]);
 
         TorrentRequestBounty::query()->create([
-            'user_id'     => $user->id,
-            'seedbonus'   => $request->bounty,
-            'requests_id' => $torrentRequest->id,
-            'anon'        => $request->anon,
+            'user_id'    => $user->id,
+            'seedbonus'  => $request->bounty,
+            'request_id' => $torrentRequest->id,
+            'anon'       => $request->anon,
         ]);
 
         // Auto Shout
