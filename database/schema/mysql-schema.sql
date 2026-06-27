@@ -1440,14 +1440,14 @@ CREATE TABLE `request_bounty` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
   `seedbonus` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `requests_id` int unsigned NOT NULL,
+  `request_id` int unsigned NOT NULL,
   `anon` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `request_bounty_user_id_foreign` (`user_id`),
-  KEY `request_bounty_requests_id_foreign` (`requests_id`),
-  CONSTRAINT `request_bounty_requests_id_foreign` FOREIGN KEY (`requests_id`) REFERENCES `requests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `request_bounty_requests_id_foreign` (`request_id`),
+  CONSTRAINT `request_bounty_requests_id_foreign` FOREIGN KEY (`request_id`) REFERENCES `requests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `request_bounty_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `check_request_bounty_seedbonus` CHECK ((`seedbonus` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3133,3 +3133,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (378,'2026_02_18_02
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (379,'2026_03_10_033755_migrate_request_bounty_created_at_to_updated_at',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2026_04_22_061705_add_pinned_column_to_posts',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2026_06_26_132559_update_history_indexes',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (382,'2026_06_27_065215_rename_bounty_requests_id',1);

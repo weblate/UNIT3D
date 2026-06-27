@@ -35,11 +35,10 @@ class TorrentRequestBountyFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),
-            'seedbonus'   => $this->faker->randomFloat(),
-            'requests_id' => $this->faker->randomDigitNotNull(),
-            'anon'        => $this->faker->boolean(),
-            'request_id'  => TorrentRequest::factory(),
+            'user_id'    => User::factory(),
+            'seedbonus'  => $this->faker->randomFloat(),
+            'anon'       => $this->faker->boolean(),
+            'request_id' => TorrentRequest::factory(),
         ];
     }
 }

@@ -78,7 +78,7 @@ class NewRequestBounty extends Notification implements ShouldQueue
         return [
             'title' => ($this->bounty->anon ? 'Anonymous' : $this->bounty->user->username).' added a bounty of '.$this->bounty->seedbonus.' to a requested torrent',
             'body'  => ($this->bounty->anon ? 'Anonymous' : $this->bounty->user->username).' added a bounty to one of your requested torrents: '.$this->bounty->request->name,
-            'url'   => route('requests.show', ['torrentRequest' => $this->bounty->requests_id], false),
+            'url'   => route('requests.show', ['torrentRequest' => $this->bounty->request_id], false),
         ];
     }
 }
