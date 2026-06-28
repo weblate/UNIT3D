@@ -29,12 +29,15 @@
             </h2>
             <div class="panel__actions">
                 <div class="panel__action">
-                    <button class="form__button form__button--text" @click.prevent="startBot()">
+                    <button
+                        class="form__button form__button--text"
+                        @click.prevent="changeBot(state.chat.bot.id)"
+                    >
                         <i class="fa fa-robot"></i>
-                        <span x-text="state.message.helpName"></span>
+                        <span x-text="state.chat.bot?.name"></span>
                     </button>
                 </div>
-                <div class="panel__action" x-show="state.chat.target < 1 && state.chat.bot < 1">
+                <div class="panel__action" x-show="state.chat.conversation?.room !== null">
                     <button class="form__button form__button--text" @click.prevent="toggleUserList">
                         <i class="fa fa-users"></i>
                         Users:
@@ -42,45 +45,15 @@
                     </button>
                 </div>
                 <div class="panel__action">
-                    <template
-                        x-if="state.chat.room && state.chat.room > 0 && state.chat.bot < 1 && state.chat.target < 1"
+                    <button
+                        class="form__button form__standard-icon-button form__standard-icon-button--skinny"
+                        @click.prevent="changeAudible(state.chat.conversation?.id)"
+                        :style="'color: ' + (state.chat.conversation?.audible ? 'rgb(0,102,0)' : 'rgb(204,0,0)')"
                     >
-                        <button
-                            class="form__button form__standard-icon-button form__standard-icon-button--skinny"
-                            @click.prevent="changeAudible('room', state.chat.room, state.chat.listening ? 0 : 1)"
-                            :style="'color: ' + (state.chat.listening ? 'rgb(0,102,0)' : 'rgb(204,0,0)')"
-                        >
-                            <i
-                                :class="state.chat.listening ? 'fa fa-bell' : 'fa fa-bell-slash'"
-                            ></i>
-                        </button>
-                    </template>
-                    <template
-                        x-if="state.chat.bot && state.chat.bot >= 1 && state.chat.target < 1"
-                    >
-                        <button
-                            class="form__button form__standard-icon-button form__standard-icon-button--skinny"
-                            @click.prevent="changeAudible('bot', state.chat.bot, state.chat.listening ? 0 : 1)"
-                            :style="'color: ' + (state.chat.listening ? 'rgb(0,102,0)' : 'rgb(204,0,0)')"
-                        >
-                            <i
-                                :class="state.chat.listening ? 'fa fa-bell' : 'fa fa-bell-slash'"
-                            ></i>
-                        </button>
-                    </template>
-                    <template
-                        x-if="state.chat.target && state.chat.target >= 1 && state.chat.bot < 1"
-                    >
-                        <button
-                            class="form__button form__standard-icon-button form__standard-icon-button--skinny"
-                            @click.prevent="changeAudible('target', state.chat.target, state.chat.listening ? 0 : 1)"
-                            :style="'color: ' + (state.chat.listening ? 'rgb(0,102,0)' : 'rgb(204,0,0)')"
-                        >
-                            <i
-                                :class="state.chat.listening ? 'fa fa-bell' : 'fa fa-bell-slash'"
-                            ></i>
-                        </button>
-                    </template>
+                        <i
+                            :class="state.chat.conversation?.audible ? 'fa fa-bell' : 'fa fa-bell-slash'"
+                        ></i>
+                    </button>
                 </div>
                 <div class="panel__action">
                     <button
@@ -145,83 +118,22 @@
         <menu id="chatbox_tabs" class="panel__tabs" role="tablist">
             <template x-for="conversation in conversations" :key="conversation.id">
                 <li
-                    x-show="conversation.room && conversation.room.name && conversation.room.name.length > 0"
                     class="panel__tab chatbox__tab"
-                    :class="state.chat.tab && conversation.room && state.chat.tab === conversation.room.name && 'panel__tab--active'"
+                    :class="state.chat.conversation?.id === conversation.id && 'panel__tab--active'"
                     role="tab"
-                    @click.prevent="changeTab('room', conversation.room.id)"
+                    @click.prevent="changeConversation(conversation.id)"
                 >
                     <i
                         class="fa fa-comment"
-                        :class="checkPings('room', conversation.room && conversation.room.id ? conversation.room.id : 0) ? 'fa-beat text-success' : 'text-danger'"
+                        :class="checkPings(conversation) ? 'fa-beat text-success' : 'text-danger'"
                     ></i>
                     <span
-                        x-text="conversation.room && conversation.room.name ? conversation.room.name : ''"
+                        x-text="conversation.room?.name || conversation.target?.username || conversation.bot?.name || ''"
                     ></span>
                     <button
-                        x-show="state.chat.tab && conversation.room && state.chat.tab === conversation.room.name"
+                        x-show="state.chat.conversation?.id === conversation.id"
                         class="chatbox__tab-delete-button"
-                        @click.prevent="leaveRoom(state.chat.room)"
-                    >
-                        <i class="fa fa-times chatbox__tab-delete-icon"></i>
-                    </button>
-                </li>
-            </template>
-            <template x-for="conversation in conversations" :key="conversation.id">
-                <li
-                    x-show="
-                        conversation.target &&
-                            conversation.target.id >= 3 &&
-                            conversation.target.username &&
-                            conversation.target.username.length > 0
-                    "
-                    class="panel__tab chatbox__tab"
-                    :class="state.chat.target >= 3 && conversation.target && state.chat.target === conversation.target.id && 'panel__tab--active'"
-                    role="tab"
-                    @click.prevent="changeTab('target', conversation.target.id)"
-                >
-                    <i
-                        class="fa fa-comment"
-                        :class="checkPings('target', conversation.target && conversation.target.id ? conversation.target.id : 0) ? 'fa-beat text-success' : 'text-danger'"
-                    ></i>
-                    @
-                    <span
-                        x-text="conversation.target && conversation.target.username ? conversation.target.username : ''"
-                    ></span>
-                    <button
-                        x-show="state.chat.target >= 3 && conversation.target && state.chat.target === conversation.target.id"
-                        class="chatbox__tab-delete-button"
-                        @click.prevent="leaveTarget(state.chat.target)"
-                    >
-                        <i class="fa fa-times chatbox__tab-delete-icon"></i>
-                    </button>
-                </li>
-            </template>
-            <template x-for="conversation in conversations" :key="conversation.id">
-                <li
-                    x-show="
-                        conversation.bot &&
-                            conversation.bot.id >= 1 &&
-                            conversation.bot.name &&
-                            conversation.bot.name.length > 0
-                    "
-                    class="panel__tab chatbox__tab"
-                    :class="state.chat.bot > 0 && conversation.bot && state.chat.bot === conversation.bot.id && 'panel__tab--active'"
-                    role="tab"
-                    @click.prevent="changeTab('bot', conversation.bot.id)"
-                >
-                    <i
-                        class="fa fa-comment"
-                        :class="checkPings('bot', conversation.bot && conversation.bot.id ? conversation.bot.id : 0) ? 'fa-beat text-success' : 'text-danger'"
-                    ></i>
-                    @
-                    <span
-                        x-text="conversation.bot && conversation.bot.name ? conversation.bot.name : ''"
-                    ></span>
-                    <button
-                        x-show="state.chat.bot > 0 && conversation.bot && state.chat.bot === conversation.bot.id"
-                        class="chatbox__tab-delete-button"
-                        @click.prevent="leaveBot(state.chat.bot)"
+                        @click.prevent="leaveConversation(conversation.id)"
                     >
                         <i class="fa fa-times chatbox__tab-delete-icon"></i>
                     </button>
@@ -229,7 +141,7 @@
             </template>
         </menu>
         <div class="chatbox__chatroom">
-            <template x-if="state.chat.tab !== ''">
+            <template x-if="state.chat.conversation !== null">
                 <div class="chatroom__messages--wrapper" x-ref="messagesWrapper">
                     <ul class="chatroom__messages">
                         <template x-for="message in [...messages.values()]" :key="message.id">
@@ -427,7 +339,7 @@
             </section>
             <form
                 class="form chatroom__new-message"
-                @submit.prevent="createMessage($refs.message.value, auth.id, state.message.receiver_id, state.message.bot_id)"
+                @submit.prevent="createMessage($refs.message.value)"
             >
                 <p class="form__group">
                     <textarea
@@ -436,7 +348,7 @@
                         name="message"
                         placeholder=" "
                         x-ref="message"
-                        @keydown.enter="!$event.shiftKey && ($event.preventDefault(), createMessage($refs.message.value, auth.id, state.message.receiver_id, state.message.bot_id), $refs.message.value = '')"
+                        @keydown.enter="!$event.shiftKey && ($event.preventDefault(), createMessage($refs.message.value), $refs.message.value = '')"
                         @keyup="isTyping(auth)"
                     ></textarea>
                     <label class="form__label form__label--floating" for="chatbox__messages-create">

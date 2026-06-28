@@ -22,22 +22,22 @@ const debounce = (func, wait) => {
 
 // Message handler module
 const messageHandler = {
-    create(message, context, user_id = 1, receiver_id = null, bot_id = null) {
+    create(message, context) {
         if (!message || message.trim() === '') return;
 
         return axios
             .post('/api/chat/messages', {
-                user_id,
-                receiver_id,
-                bot_id,
-                chatroom_id: context.state.chat.room,
+                receiver_id: context.state.chat.conversation.bot
+                    ? 1
+                    : context.state.chat.conversation.target?.id,
+                bot_id: context.state.chat.conversation.bot?.id,
+                chatroom_id: context.state.chat.conversation.room?.id,
                 message: message,
-                targeted: context.state.chat.target,
             })
             .then((response) => {
                 if (
-                    context.state.chat.activeTab.startsWith('bot') ||
-                    context.state.chat.activeTab.startsWith('target')
+                    context.state.chat.conversation.bot !== null ||
+                    context.state.chat.conversation.target !== null
                 ) {
                     context.messages.set(response.data.data.id, response.data.data);
                 }
@@ -87,7 +87,7 @@ const channelHandler = {
                 context.users.delete(user.id);
             })
             .listen('.new.message', (e) => {
-                if (!context.state.chat.activeTab.startsWith('room')) return;
+                if (context.state.chat.conversation.room === null) return;
                 const message = context.processMessageCanMod(e.message);
                 context.messages.set(message.id, message);
             })
@@ -95,11 +95,19 @@ const channelHandler = {
                 context.handlePing('room', e.ping.id);
             })
             .listen('.delete.message', (e) => {
-                if (context.state.chat.target > 0 || context.state.chat.bot > 0) return;
+                if (
+                    context.state.chat.conversation.target !== null ||
+                    context.state.chat.conversation.bot !== null
+                )
+                    return;
                 context.messages.delete(e.message.id);
             })
             .listenForWhisper('typing', (e) => {
-                if (context.state.chat.target > 0 || context.state.chat.bot > 0) return;
+                if (
+                    context.state.chat.conversation.target !== null ||
+                    context.state.chat.conversation.bot !== null
+                )
+                    return;
                 const username = e.username;
                 clearTimeout(context.activePeer.get(username));
                 const messageTimeout = setTimeout(() => context.activePeer.delete(username), 15000);
@@ -117,21 +125,11 @@ document.addEventListener('alpine:init', () => {
                 error: null,
             },
             chat: {
-                tab: '',
-                room: 0,
-                target: 0,
-                bot: 0,
-                activeTab: '',
-                listening: 1,
+                conversation: null,
+                room: null,
+                bot: null,
                 showWhispers: true,
                 showUserList: false,
-            },
-            message: {
-                helpName: '',
-                helpCommand: '',
-                helpId: 0,
-                receiver_id: null,
-                bot_id: null,
             },
         },
 
@@ -157,6 +155,7 @@ document.addEventListener('alpine:init', () => {
                 this.fetchRooms(),
             ])
                 .then(() => {
+                    this.state.chat.conversation = this.conversations[0];
                     this.state.ui.loading = false;
                     this.listenForChatter();
 
@@ -207,9 +206,8 @@ document.addEventListener('alpine:init', () => {
                 const response = await axios.get('/api/chat/bots');
                 const bots = response.data.data;
                 if (bots.length > 0) {
-                    this.state.message.helpId = bots[0].id;
-                    this.state.message.helpName = bots[0].name;
-                    this.state.message.helpCommand = bots[0].command;
+                    console.log('here');
+                    this.state.chat.bot = bots[0];
                 }
             } catch (error) {
                 console.error('Error fetching bots:', error);
@@ -257,11 +255,9 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        async fetchPrivateMessages() {
+        async fetchPrivateMessages(id) {
             try {
-                const response = await axios.get(
-                    `/api/chat/private/messages/${this.state.chat.target}`,
-                );
+                const response = await axios.get(`/api/chat/private/messages/${id}`);
                 // Process messages to add canMod property for each message and sanitize content
                 this.messages = new Map(
                     response.data.data
@@ -326,55 +322,23 @@ document.addEventListener('alpine:init', () => {
         },
 
         // Tab/Room/Target/Bot switching
-        changeTab(typeVal, newVal) {
-            if (typeVal == 'room') {
-                this.state.chat.bot = 0;
-                this.state.chat.target = 0;
-                this.state.message.bot_id = 0;
-                this.state.message.receiver_id = 0;
-                this.state.chat.tab = newVal;
-                this.state.chat.activeTab = 'room' + newVal;
-                this.deletePing('room', newVal);
+        changeConversation(id) {
+            let conversation = this.conversations.find((o) => o.id === id);
 
-                let currentRoom = this.conversations.find((o) => o.room && o.room.id == newVal);
-                if (currentRoom) {
-                    if (this.state.chat.room === currentRoom.room.id) {
-                        this.fetchMessages();
-                    } else {
-                        this.state.chat.room = currentRoom.room.id;
-                    }
-                    this.state.message.receiver_id = null;
-                    this.state.message.bot_id = null;
-                    this.state.chat.listening = currentRoom.audible ? 1 : 0;
-                }
-            } else if (typeVal == 'target') {
-                this.state.chat.bot = 0;
-                this.state.chat.tab = newVal;
-                this.state.chat.activeTab = 'target' + newVal;
-                this.deletePing('target', newVal);
+            this.state.chat.conversation = conversation;
 
-                let currentTarget = this.conversations.find(
-                    (o) => o.target && o.target.id == newVal,
-                );
-                if (currentTarget) {
-                    this.changeTarget(currentTarget.target.id);
-                    this.state.message.receiver_id = currentTarget.target.id;
-                    this.state.message.bot_id = null;
-                    this.state.chat.listening = currentTarget.audible ? 1 : 0;
-                }
-            } else if (typeVal == 'bot') {
-                this.state.chat.target = 0;
-                this.state.chat.tab = newVal;
-                this.state.chat.activeTab = 'bot' + newVal;
-                this.deletePing('bot', newVal);
+            if (conversation.room !== null) {
+                this.fetchMessages();
+            }
 
-                let currentBot = this.conversations.find((o) => o.bot && o.bot.id == newVal);
-                if (currentBot) {
-                    this.changeBot(currentBot.bot.id);
-                    this.state.message.receiver_id = 1;
-                    this.state.message.bot_id = currentBot.bot.id;
-                    this.state.chat.listening = currentBot.audible ? 1 : 0;
-                }
+            if (conversation.target !== null) {
+                this.deletePing('target', conversation.target.id);
+                this.fetchPrivateMessages(conversation.target.id);
+            }
+
+            if (conversation.bot !== null) {
+                this.deletePing('bot', conversation.bot.id);
+                this.fetchBotMessages(conversation.bot.id);
             }
         },
 
@@ -383,20 +347,16 @@ document.addEventListener('alpine:init', () => {
         },
 
         changeRoom(id) {
-            this.state.chat.bot = 0;
-            this.state.chat.target = 0;
-            this.state.message.bot_id = null;
-            this.state.message.receiver_id = null;
-
             if (this.auth.chatroom.id === id) {
-                this.state.chat.tab = this.auth.chatroom.name;
                 this.fetchMessages();
             } else {
                 axios
                     .post(`/api/chat/user/chatroom`, { room_id: id })
                     .then((response) => {
                         this.auth = response.data;
-                        this.state.chat.tab = this.auth.chatroom.name;
+                        this.state.chat.conversation = this.conversations.find(
+                            (conversation) => conversation.room?.id === id,
+                        );
                         this.fetchMessages();
                     })
                     .catch((error) => {
@@ -408,91 +368,41 @@ document.addEventListener('alpine:init', () => {
             channelHandler.setupRoom(id, this);
         },
 
-        leaveRoom(id) {
-            if (id !== 1) {
-                // Update the user's chatroom in the database
+        leaveConversation(id) {
+            let conversation = this.conversations.find((o) => o.id === id);
+
+            if (conversation.room !== null) {
                 axios
-                    .post(`/api/chat/conversations/delete/chatroom`, { room_id: id })
+                    .post('/api/chat/conversations/delete/chatroom', {
+                        room_id: conversation.room.id,
+                    })
                     .then((response) => {
-                        // Reassign the auth variable to the response data
                         this.auth = response.data;
-                        document.getElementById('currentChatroom').value = '1';
-                        this.fetchRooms().then(() => {
-                            // Check if there are other chat tabs available
-                            if (this.state.chat.tab) {
-                                // Switch to the first chat tab
-                                const firstTab = this.state.chat.tab;
-                                this.changeTab('room', firstTab);
-                            } else if (this.chatrooms.length > 0) {
-                                // Default to the first chatroom from the dropdown
-                                const firstChatroom = this.chatrooms[0];
-                                this.state.chat.room = firstChatroom.id;
-                            } else {
-                                console.warn('No chat tabs or chatrooms available.');
-                            }
-                        });
+                        this.changeRoom(this.auth.chatroom_id);
                     })
                     .catch((error) => {
                         console.error('Error leaving room:', error);
                     });
             }
-        },
 
-        changeTarget(id) {
-            if (this.state.chat.target !== id && id != 0) {
-                this.state.chat.target = id;
-                this.fetchPrivateMessages();
-            }
-        },
-
-        leaveTarget(id) {
-            if (id !== 1) {
-                // Update the user's chatroom in the database
+            if (conversation.target !== null) {
                 axios
-                    .post(`/api/chat/conversations/delete/target`, { target_id: id })
+                    .post('/api/chat/conversations/delete/target', {
+                        target_id: conversation.target.id,
+                    })
                     .then((response) => {
-                        // Reassign the auth variable to the response data
                         this.auth = response.data;
-                        document.getElementById('currentChatroom').value = '1';
-                        this.fetchRooms().then(() => {
-                            // Check if there are other chat tabs available
-                            if (this.state.chat.tab) {
-                                // Switch to the first chat tab
-                                const firstTab = this.state.chat.tab;
-                                this.changeTab('room', firstTab);
-                            } else if (this.chatrooms.length > 0) {
-                                // Default to the first chatroom from the dropdown
-                                const firstChatroom = this.chatrooms[0];
-                                this.state.chat.room = firstChatroom.id;
-                            } else {
-                                console.warn('No chat tabs or chatrooms available.');
-                            }
-                        });
+                        this.changeRoom(this.auth.chatroom_id);
                     })
                     .catch((error) => {
-                        console.error('Error leaving room:', error);
+                        console.error('Error leaving target:', error);
                     });
-            }
-        },
-
-        changeBot(id) {
-            if (this.state.chat.bot !== id && id != 0) {
-                this.state.chat.bot = id;
-                this.state.message.bot_id = id;
-                this.state.message.receiver_id = 1;
-                this.fetchBotMessages(this.state.chat.bot);
             }
         },
 
         // Delegate message operations to messageHandler
-        createMessage(message, user_id = 1, receiver_id = null, bot_id = null) {
-            return messageHandler.create(
-                message,
-                this,
-                user_id,
-                receiver_id || this.state.message.receiver_id,
-                bot_id || this.state.message.bot_id,
-            );
+        createMessage(message) {
+            return messageHandler.create(message, this);
         },
 
         deleteMessage(id) {
@@ -530,11 +440,7 @@ document.addEventListener('alpine:init', () => {
                 if (e.type == 'conversations') {
                     this.conversations = this.sortConversations(e.conversations);
                 } else if (e.type == 'new.message') {
-                    if (
-                        !this.state.chat.activeTab.startsWith('bot') &&
-                        !this.state.chat.activeTab.startsWith('target')
-                    )
-                        return;
+                    if (this.state.chat.conversation.room !== null) return;
 
                     if (e.message.bot && e.message.bot.id != this.state.chat.bot) return;
                     if (e.message.user && e.message.user.id != this.state.chat.target) return;
@@ -602,8 +508,18 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        checkPings(type, id) {
-            return this.pings.some((p) => p.type === type && p.id === id);
+        checkPings(conversation) {
+            if (conversation.target !== null) {
+                return this.pings.some(
+                    (p) => p.type === 'target' && p.id === conversation.target.id,
+                );
+            }
+
+            if (conversation.bot !== null) {
+                return this.pings.some((p) => p.type === 'bot' && p.id === conversation.bot.id);
+            }
+
+            return false;
         },
 
         // UI actions
@@ -623,15 +539,19 @@ document.addEventListener('alpine:init', () => {
                 });
         },
 
-        startBot() {
-            if (this.state.chat.bot == 9999) return;
-
-            this.state.chat.tab = '@' + this.state.message.helpName;
-            this.state.chat.bot = this.state.message.helpId;
-            this.state.message.bot_id = this.state.message.helpId;
-            this.state.message.receiver_id = 1;
-
-            this.fetchBotMessages(this.state.chat.bot);
+        changeBot(id) {
+            axios
+                .post(`/api/chat/user/bot`, { bot_id: id })
+                .then((response) => {
+                    this.auth = response.data;
+                    this.state.chat.conversation = this.conversations.find(
+                        (conversation) => conversation.bot?.id === id,
+                    );
+                    this.fetchBotMessages(id);
+                })
+                .catch((error) => {
+                    console.error('Error changing bot:', error);
+                });
         },
 
         forceMessage(name) {

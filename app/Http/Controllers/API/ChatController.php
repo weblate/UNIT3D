@@ -370,6 +370,31 @@ class ChatController extends Controller
         return response()->json($user);
     }
 
+    public function updateBotRoom(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+        $bot = Bot::query()->findOrFail($request->integer('bot_id'));
+
+        // Create echo for user if missing
+        $affected = ChatConversation::query()->upsert([[
+            'user_id'    => $user->id,
+            'bot_id'     => $bot->id,
+            'deleted_at' => null,
+            'audible'    => false,
+        ]], ['user_id', 'bot_id'], ['deleted_at']);
+
+        if ($affected === 1) {
+            Chatter::dispatch('conversations', $user->id, ChatConversationResource::collection(
+                ChatConversation::query()
+                    ->with(['user', 'room', 'target', 'bot'])
+                    ->where('user_id', '=', $user->id)
+                    ->get()
+            ));
+        }
+
+        return response()->json($user);
+    }
+
     public function updateUserTarget(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user()->load(['chatStatus', 'chatroom', 'group']);
