@@ -1107,13 +1107,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      */
     public function getFormattedUploadedAttribute(): string
     {
-        $bytes = $this->uploaded;
-
-        if ($bytes > 0) {
-            return StringHelper::formatBytes((float) $bytes, 2);
-        }
-
-        return StringHelper::formatBytes(0, 2);
+        return StringHelper::formatBytes((float) $this->uploaded, 2);
     }
 
     /**
@@ -1121,13 +1115,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      */
     public function getFormattedDownloadedAttribute(): string
     {
-        $bytes = $this->downloaded;
-
-        if ($bytes > 0) {
-            return StringHelper::formatBytes((float) $bytes, 2);
-        }
-
-        return StringHelper::formatBytes(0, 2);
+        return StringHelper::formatBytes((float) $this->downloaded, 2);
     }
 
     /**
@@ -1157,18 +1145,27 @@ final class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Return the size (in bytes) which can be safely downloaded
+     * without falling under the minimum ratio.
+     */
+    public function getBufferAttribute(): float
+    {
+        if (config('other.ratio') === 0) {
+            return INF;
+        }
+
+        $bytes = round(($this->uploaded / config('other.ratio')) - $this->downloaded);
+
+        return $bytes;
+    }
+
+    /**
      * Return the size (pretty formatted) which can be safely downloaded
      * without falling under the minimum ratio.
      */
     public function getFormattedBufferAttribute(): string
     {
-        if (config('other.ratio') === 0) {
-            return '∞';
-        }
-
-        $bytes = round(($this->uploaded / config('other.ratio')) - $this->downloaded);
-
-        return StringHelper::formatBytes($bytes);
+        return StringHelper::formatBytes($this->buffer);
     }
 
     /**
