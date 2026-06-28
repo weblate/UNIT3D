@@ -334,7 +334,7 @@
 
 @section('sidebar')
     <section class="panelV2">
-        <h2 class="panel__heading">{{ __('user.reset-api-token') }}</h2>
+        <h2 class="panel__heading">{{ __('common.info') }}</h2>
         <div class="panel__body">
             <p>Use a separate apikey for each application you provide it to.</p>
             <p>{{ __('user.reset-api-help') }}.</p>

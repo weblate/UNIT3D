@@ -26,7 +26,7 @@ return new class () extends Migration {
     {
         Schema::table('apikeys', function (Blueprint $table): void {
             $table->index('content');
-            $table->string('name')->after('user_id');
+            $table->string('name')->after('user_id')->default('deprecated_api_key');
             $table->boolean('can_search')->after('content')->default(true);
             $table->boolean('can_download')->after('can_search')->default(true);
             $table->boolean('can_upload')->after('can_download')->default(true);
@@ -39,6 +39,7 @@ return new class () extends Migration {
         });
 
         Schema::table('apikeys', function (Blueprint $table): void {
+            $table->string('name')->change();
             $table->boolean('can_search')->change();
             $table->boolean('can_download')->change();
             $table->boolean('can_upload')->change();
