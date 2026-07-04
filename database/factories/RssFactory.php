@@ -40,7 +40,6 @@ class RssFactory extends Factory
             'is_private'   => $this->faker->boolean(),
             'is_torrent'   => $this->faker->boolean(),
             'json_torrent' => $this->faker->word(),
-            'staff_id'     => User::factory(),
         ];
     }
 }
