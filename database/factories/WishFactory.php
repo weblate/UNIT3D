@@ -34,11 +34,9 @@ class WishFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'title'   => $this->faker->sentence(),
-            'tmdb'    => $this->faker->word(),
-            'type'    => $this->faker->word(),
-            'source'  => $this->faker->word(),
+            'user_id'       => User::factory(),
+            'title'         => $this->faker->sentence(),
+            'tmdb_movie_id' => $this->faker->randomNumber(),
         ];
     }
 }
