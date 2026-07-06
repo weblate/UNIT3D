@@ -66,6 +66,7 @@
                             autocomplete="username"
                             autofocus
                             name="username"
+                            pattern="[^@]*"
                             required
                             type="text"
                             value="{{ old('username') }}"
