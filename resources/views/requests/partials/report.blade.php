@@ -7,13 +7,9 @@
     </button>
     <dialog id="request-report" class="dialog" popover>
         <h3 class="dialog__heading">{{ __('request.report') }}: {{ $torrentRequest->name }}</h3>
-        <form
-            class="dialog__form"
-            method="POST"
-            action="{{ route('report_request', ['id' => $torrentRequest->id]) }}"
-        >
+        <form class="dialog__form" method="POST" action="{{ route('reports.store') }}">
             @csrf
-            <input id="type" type="hidden" name="title" value="{{ $torrentRequest->name }}" />
+            <input type="hidden" name="reported_request_id" value="{{ $torrentRequest->id }}" />
             <p class="form__group">
                 <textarea
                     id="message"

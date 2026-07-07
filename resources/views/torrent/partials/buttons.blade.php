@@ -410,13 +410,9 @@
                     {{ __('common.report') }} {{ strtolower(__('torrent.torrent')) }}:
                     {{ $torrent->name }}
                 </h4>
-                <form
-                    class="dialog__form"
-                    method="POST"
-                    action="{{ route('report_torrent', ['id' => $torrent->id]) }}"
-                >
+                <form class="dialog__form" method="POST" action="{{ route('reports.store') }}">
                     @csrf
-                    <input type="hidden" name="torrent_id" value="{{ $torrent->id }}" />
+                    <input type="hidden" name="reported_torrent_id" value="{{ $torrent->id }}" />
                     <p class="form__group">
                         <textarea
                             id="message"
