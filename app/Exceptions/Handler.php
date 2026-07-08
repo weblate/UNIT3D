@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
     private static function isReadOnlyError(QueryException $e): bool
     {
         return 1 === preg_match(
-            '/SQLSTATE\[HY000\]: General error: 1290 The (MySQL|MariaDB) server is running with the --read-only option so it cannot execute this statement/',
+            '/SQLSTATE\[HY000\]: General error: 1290 The (MySQL|MariaDB) server is running with the --read-only(=ON)? option so it cannot execute this statement/',
             $e->getMessage(),
         );
     }
