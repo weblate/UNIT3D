@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -55,7 +56,22 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e): void {
+        $this->reportable(fn (QueryException $e): bool => ! self::isReadOnlyError($e));
+
+        $this->renderable(function (QueryException $e): \Illuminate\Http\Response|bool {
+            if (self::isReadOnlyError($e)) {
+                return response()->view('errors.503', [], 503);
+            }
+
+            return false;
         });
+    }
+
+    private static function isReadOnlyError(QueryException $e): bool
+    {
+        return 1 === preg_match(
+            '/SQLSTATE\[HY000\]: General error: 1290 The (MySQL|MariaDB) server is running with the --read-only option so it cannot execute this statement/',
+            $e->getMessage(),
+        );
     }
 }
