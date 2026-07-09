@@ -34,6 +34,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\User.
@@ -133,6 +134,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      *     is_lifetime: 'bool'
      * }
      */
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -1184,6 +1186,7 @@ final class User extends Authenticatable implements MustVerifyEmail
      * @param       $token
      * @return void
      */
+    #[Override]
     public function sendPasswordResetNotification($token): void
     {
         dispatch(fn () => $this->notify(new ResetPassword($token)))->afterResponse();

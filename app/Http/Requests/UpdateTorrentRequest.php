@@ -23,6 +23,7 @@ use App\Models\Torrent;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Override;
 
 class UpdateTorrentRequest extends FormRequest
 {
@@ -37,6 +38,7 @@ class UpdateTorrentRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->merge([

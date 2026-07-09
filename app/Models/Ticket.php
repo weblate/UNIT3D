@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\Ticket.
@@ -57,6 +58,7 @@ final class Ticket extends Model
      *
      * @return array{user_read: 'bool', staff_read: 'bool', closed_at: 'datetime', reminded_at: 'datetime'}
      */
+    #[Override]
     protected function casts(): array
     {
         return [

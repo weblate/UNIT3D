@@ -20,6 +20,7 @@ use App\Models\TorrentRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\TorrentRequestBounty;
+use Override;
 
 /** @extends Factory<TorrentRequestBounty> */
 class TorrentRequestBountyFactory extends Factory
@@ -32,6 +33,7 @@ class TorrentRequestBountyFactory extends Factory
     /**
      * Define the model's default state.
      */
+    #[Override]
     public function definition(): array
     {
         return [

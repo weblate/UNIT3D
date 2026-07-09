@@ -8,6 +8,7 @@ use App\Enums\UserGroup;
 use App\Models\Group;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class UpsertUserNotificationRequest extends FormRequest
 {
@@ -72,6 +73,7 @@ class UpsertUserNotificationRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->merge([

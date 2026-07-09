@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
      * bindings with the application. As you can see, we are registering our
      * "Registrar" implementation here. You can add your own bindings too!
      */
+    #[Override]
     public function register(): void
     {
         // Hidden Captcha

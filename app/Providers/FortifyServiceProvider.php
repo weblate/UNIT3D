@@ -30,6 +30,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Fortify;
+use Override;
 
 use function Illuminate\Support\defer;
 
@@ -38,12 +39,14 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
+    #[Override]
     public function register(): void
     {
         Fortify::ignoreRoutes();
 
         // Handle redirects after successful login
         $this->app->instance(LoginResponse::class, new class () implements LoginResponse {
+            #[Override]
             public function toResponse($request): \Illuminate\Http\RedirectResponse
             {
                 $user = $request->user()->load('group:id,slug');

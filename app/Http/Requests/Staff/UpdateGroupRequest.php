@@ -20,6 +20,7 @@ use App\Models\Group;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Override;
 
 class UpdateGroupRequest extends FormRequest
 {
@@ -219,6 +220,7 @@ class UpdateGroupRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

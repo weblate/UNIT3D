@@ -24,6 +24,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notification;
+use Override;
 
 class TorrentsDeleted extends Notification implements ShouldQueue, SystemNotificationInterface
 {
@@ -51,6 +52,7 @@ class TorrentsDeleted extends Notification implements ShouldQueue, SystemNotific
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toSystemNotification(User $notifiable): array
     {
         return [

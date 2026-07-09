@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\Group.
@@ -97,6 +98,7 @@ final class Group extends Model
      *     min_ratio: 'decimal:2',
      * }
      */
+    #[Override]
     protected function casts(): array
     {
         return [

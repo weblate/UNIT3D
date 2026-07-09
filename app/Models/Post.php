@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\Post.
@@ -61,6 +62,7 @@ final class Post extends Model
      *
      * @return array{anon: 'bool'}
      */
+    #[Override]
     protected function casts(): array
     {
         return [

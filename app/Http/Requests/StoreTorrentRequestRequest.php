@@ -20,6 +20,7 @@ use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Override;
 
 class StoreTorrentRequestRequest extends FormRequest
 {
@@ -34,6 +35,7 @@ class StoreTorrentRequestRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->merge([
@@ -186,6 +188,7 @@ class StoreTorrentRequestRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

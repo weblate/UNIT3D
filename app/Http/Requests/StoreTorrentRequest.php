@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Closure;
 use Exception;
+use Override;
 
 class StoreTorrentRequest extends FormRequest
 {
@@ -41,6 +42,7 @@ class StoreTorrentRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->merge([

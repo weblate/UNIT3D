@@ -18,6 +18,7 @@ namespace App\Exceptions;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Override;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -54,6 +55,7 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
+    #[Override]
     public function register(): void
     {
         $this->reportable(fn (QueryException $e): bool => ! self::isReadOnlyError($e));
