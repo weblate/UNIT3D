@@ -32,7 +32,7 @@ class ApikeyReset extends Notification implements ShouldQueue, SystemNotificatio
      *
      * @return class-string
      */
-    public function via(object $notifiable): string
+    public function via(object $_notifiable): string
     {
         return SystemNotificationChannel::class;
     }

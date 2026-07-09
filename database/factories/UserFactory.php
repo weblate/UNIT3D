@@ -75,7 +75,7 @@ class UserFactory extends Factory
 
     public function system(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $_attributes) => [
             'id'       => User::SYSTEM_USER_ID,
             'email'    => config('unit3d.default-owner-email'),
             'group_id' => 9,

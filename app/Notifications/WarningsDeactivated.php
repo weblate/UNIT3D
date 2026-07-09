@@ -36,7 +36,7 @@ class WarningsDeactivated extends Notification implements ShouldQueue, SystemNot
      *
      * @return class-string
      */
-    public function via(object $notifiable): string
+    public function via(object $_notifiable): string
     {
         return SystemNotificationChannel::class;
     }

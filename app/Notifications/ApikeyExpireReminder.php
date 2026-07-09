@@ -36,7 +36,7 @@ class ApikeyExpireReminder extends Notification implements ShouldQueue, SystemNo
      *
      * @return class-string
      */
-    public function via(object $notifiable): string
+    public function via(object $_notifiable): string
     {
         return SystemNotificationChannel::class;
     }

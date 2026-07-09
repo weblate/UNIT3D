@@ -83,7 +83,7 @@ class BountyController extends Controller
             ->with('success', trans('request.added-bonus'));
     }
 
-    public function update(UpdateTorrentRequestBountyRequest $request, TorrentRequest $torrentRequest, TorrentRequestBounty $torrentRequestBounty): \Illuminate\Http\RedirectResponse
+    public function update(UpdateTorrentRequestBountyRequest $request, TorrentRequest $_torrentRequest, TorrentRequestBounty $torrentRequestBounty): \Illuminate\Http\RedirectResponse
     {
         abort_unless($request->user()->group->is_modo || $request->user()->id === $torrentRequestBounty->user_id, 403);
 

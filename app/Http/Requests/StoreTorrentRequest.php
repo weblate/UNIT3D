@@ -73,7 +73,7 @@ class StoreTorrentRequest extends FormRequest
             'torrent' => [
                 'required',
                 'file',
-                function (string $attribute, mixed $value, Closure $fail): void {
+                function (string $_attribute, mixed $value, Closure $fail): void {
                     if ($value->getClientOriginalExtension() !== 'torrent') {
                         $fail('The torrent file uploaded does not have a ".torrent" file extension (it has "'.$value->getClientOriginalExtension().'"). Did you upload the correct file?');
                     }
@@ -114,7 +114,7 @@ class StoreTorrentRequest extends FormRequest
                 'nullable',
                 'sometimes',
                 'file',
-                function (string $attribute, mixed $value, Closure $fail): void {
+                function (string $_attribute, mixed $value, Closure $fail): void {
                     if ($value->getClientOriginalExtension() !== 'nfo') {
                         $fail('The NFO uploaded does not have a ".nfo" file extension (it has "'.$value->getClientOriginalExtension().'"). Did you upload the correct file?');
                     }

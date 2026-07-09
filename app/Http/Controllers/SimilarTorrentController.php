@@ -26,7 +26,6 @@ use App\Models\TorrentRequest;
 use App\Models\TmdbTv;
 use App\Services\Igdb\IgdbScraper;
 use App\Services\Tmdb\TMDBScraper;
-use Illuminate\Http\Request;
 
 class SimilarTorrentController extends Controller
 {
@@ -105,7 +104,7 @@ class SimilarTorrentController extends Controller
         ]);
     }
 
-    public function update(Request $request, Category $category, int $metaId): \Illuminate\Http\RedirectResponse
+    public function update(Category $category, int $metaId): \Illuminate\Http\RedirectResponse
     {
         if (!($category->movie_meta || $category->tv_meta || $category->game_meta)) {
             return to_route('torrents.similar', ['category_id' => $category->id, 'tmdb' => $metaId])

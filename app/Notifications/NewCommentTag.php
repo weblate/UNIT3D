@@ -47,7 +47,7 @@ class NewCommentTag extends Notification implements ShouldQueue
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via(object $_notifiable): array
     {
         return ['database'];
     }
@@ -95,7 +95,7 @@ class NewCommentTag extends Notification implements ShouldQueue
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function toArray(object $_notifiable): array
     {
         $username = $this->comment->anon ? 'Anonymous' : $this->comment->user->username;
         $title = $this->comment->anon ? 'You were tagged' : $username.' tagged you';
