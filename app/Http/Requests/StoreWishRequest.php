@@ -36,7 +36,7 @@ class StoreWishRequest extends FormRequest
      *
      * @return array<string, array<\Illuminate\Validation\Rules\Unique|string>>
      */
-    public function rules(Request $request): array
+    public function rules(): array
     {
         $user = auth()->user();
 

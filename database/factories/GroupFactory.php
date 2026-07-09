@@ -66,7 +66,7 @@ class GroupFactory extends Factory
 
     public function owner(): GroupFactory
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $_attributes) => [
             'is_owner' => true,
             'is_admin' => true,
             'is_modo'  => true,

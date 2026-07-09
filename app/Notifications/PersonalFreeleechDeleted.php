@@ -32,7 +32,7 @@ class PersonalFreeleechDeleted extends Notification implements ShouldQueue, Syst
      *
      * @return class-string
      */
-    public function via(object $notifiable): string
+    public function via(object $_notifiable): string
     {
         return SystemNotificationChannel::class;
     }

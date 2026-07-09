@@ -38,7 +38,7 @@ class NewRequestUnclaim extends Notification implements ShouldQueue
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via(object $_notifiable): array
     {
         return ['database'];
     }
@@ -71,7 +71,7 @@ class NewRequestUnclaim extends Notification implements ShouldQueue
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function toArray(object $_notifiable): array
     {
         return [
             'title' => $this->sender.' unclaimed one of your requested torrents',

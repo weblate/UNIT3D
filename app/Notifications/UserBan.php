@@ -45,7 +45,7 @@ class UserBan extends Notification implements ShouldQueue
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via(object $_notifiable): array
     {
         return ['mail'];
     }
@@ -55,7 +55,7 @@ class UserBan extends Notification implements ShouldQueue
      *
      * @return array<int, object>
      */
-    public function middleware(object $notifiable, string $channel): array
+    public function middleware(object $_notifiable, string $channel): array
     {
         return match ($channel) {
             'mail'  => [new RateLimitOutboundMail()],
@@ -66,7 +66,7 @@ class UserBan extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $_notifiable): MailMessage
     {
         $chatUrl = config('unit3d.chat-link-url');
 

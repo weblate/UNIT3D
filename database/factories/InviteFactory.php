@@ -46,14 +46,14 @@ class InviteFactory extends Factory
 
     public function expired(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $_attributes) => [
             'expires_on' => $this->faker->dateTimeBetween('-1 month', '-1 day'),
         ]);
     }
 
     public function accepted(): self
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $_attributes) => [
             'accepted_by' => User::factory(),
             'accepted_at' => $this->faker->dateTimeBetween('-1 month'),
         ]);

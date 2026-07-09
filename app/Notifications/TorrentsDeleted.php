@@ -41,7 +41,7 @@ class TorrentsDeleted extends Notification implements ShouldQueue, SystemNotific
      *
      * @return class-string
      */
-    public function via(object $notifiable): string
+    public function via(object $_notifiable): string
     {
         return SystemNotificationChannel::class;
     }

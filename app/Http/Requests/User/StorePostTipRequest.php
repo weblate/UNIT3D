@@ -36,7 +36,7 @@ class StorePostTipRequest extends FormRequest
         return [
             'post_id' => [
                 'required',
-                function ($attribute, $value, $fail): void {
+                function ($_attribute, $value, $fail): void {
                     if (
                         Post::query()->whereKey($value)->whereNotIn(
                             'topic_id',
