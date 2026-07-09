@@ -59,6 +59,7 @@ use App\Console\Commands\SyncPeers;
 use Illuminate\Auth\Console\ClearResetsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Override;
 use Spatie\Backup\Commands\BackupCommand;
 use Spatie\Backup\Commands\CleanupCommand;
 
@@ -67,6 +68,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+    #[Override]
     protected function schedule(Schedule $schedule): void
     {
         if (! config('announce.external_tracker.is_enabled')) {
@@ -122,6 +124,7 @@ class Kernel extends ConsoleKernel
     /**
      * Register the Closure based commands for the application.
      */
+    #[Override]
     protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');

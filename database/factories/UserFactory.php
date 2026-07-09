@@ -22,6 +22,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use Override;
 use Str;
 
 /** @extends Factory<User> */
@@ -35,6 +36,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      */
+    #[Override]
     public function definition(): array
     {
         return [

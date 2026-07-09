@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\Event.
@@ -50,6 +51,7 @@ final class Giveaway extends Model
      *
      * @return array{starts_at: 'datetime', ends_at: 'datetime'}
      */
+    #[Override]
     protected function casts(): array
     {
         return [

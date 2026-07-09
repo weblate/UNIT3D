@@ -19,6 +19,7 @@ namespace Database\Factories;
 use App\Models\Invite;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Override;
 
 /** @extends Factory<Invite> */
 class InviteFactory extends Factory
@@ -31,6 +32,7 @@ class InviteFactory extends Factory
     /**
      * Define the model's default state.
      */
+    #[Override]
     public function definition(): array
     {
         return [

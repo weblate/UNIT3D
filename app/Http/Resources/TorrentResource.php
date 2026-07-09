@@ -20,6 +20,7 @@ use App\Enums\AuthGuard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @mixin \App\Models\Torrent
@@ -86,6 +87,7 @@ class TorrentResource extends JsonResource
      *     }
      * }
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         return [
@@ -145,6 +147,7 @@ class TorrentResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      */
+    #[Override]
     public function withResponse(Request $request, JsonResponse $response): void
     {
         $response->setEncodingOptions(JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);

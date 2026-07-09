@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use AllowDynamicProperties;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 /**
  * App\Models\Apikey.
@@ -60,6 +61,7 @@ final class Apikey extends Model
      *
      * @return array{deleted_at: 'datetime'}
      */
+    #[Override]
     protected function casts(): array
     {
         return [

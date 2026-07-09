@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use AllowDynamicProperties;
+use Override;
 
 /**
  * App\Models\TorrentRequestBounty.
@@ -60,6 +61,7 @@ final class TorrentRequestBounty extends Model
      *
      * @return array{seedbonus: 'decimal:2'}
      */
+    #[Override]
     protected function casts(): array
     {
         return [
