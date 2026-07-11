@@ -53,6 +53,7 @@ use App\Console\Commands\AutoUpsertAnnounces;
 use App\Console\Commands\AutoUpsertHistories;
 use App\Console\Commands\AutoUpsertPeers;
 use App\Console\Commands\AutoWarning;
+use App\Console\Commands\DeleteOrphanedPeople;
 use App\Console\Commands\DeleteUnparticipatedConversations;
 use App\Console\Commands\EmailBlacklistUpdate;
 use App\Console\Commands\SyncPeers;
@@ -102,6 +103,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(AutoDisableInactiveUsers::class)->daily();
         $schedule->command(AutoSoftDeleteDisabledUsers::class)->daily();
         $schedule->command(AutoRecycleClaimedTorrentRequests::class)->daily();
+        $schedule->command(DeleteOrphanedPeople::class)->daily();
         $schedule->command(DeleteUnparticipatedConversations::class)->daily();
         $schedule->command(AutoCorrectHistory::class)->daily();
         $schedule->command(EmailBlacklistUpdate::class)->weekends();
