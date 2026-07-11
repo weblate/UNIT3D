@@ -22,12 +22,11 @@
                     class="form__text"
                     inputmode="numeric"
                     name="seedbonus"
-                    pattern="[0-9]*?[1-9][0-9]{2,}"
                     placeholder=" "
                     type="text"
                 />
                 <label for="seedbonus" class="form__label form__label--floating">
-                    {{ __('request.enter-bp') }}
+                    {{ __('request.enter-bp', ['min' => config('other.bon.min-bounty')]) }}
                 </label>
             </p>
             <p class="form__group">
@@ -38,7 +37,7 @@
             <p class="form__group">
                 <button
                     class="form__button form__button--filled"
-                    @if ($user->seedbonus < 100)
+                    @if ($user->seedbonus < config('other.bon.min-bounty'))
                         disabled
                         title="{{ __('request.dont-have-bps') }}"
                     @endif
