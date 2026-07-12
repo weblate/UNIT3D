@@ -22,11 +22,13 @@ use App\Models\TmdbTv;
 use App\Models\Torrent;
 use JsonException;
 use ReflectionException;
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait TorrentMeta
 {
     /**
-     * @param \Illuminate\Database\Eloquent\Collection<int, Torrent>|\Illuminate\Pagination\CursorPaginator<int, Torrent>|\Illuminate\Pagination\LengthAwarePaginator<int, Torrent>|\Illuminate\Contracts\Pagination\LengthAwarePaginator<int, Torrent> $torrents
+     * @param \Illuminate\Database\Eloquent\Collection<int, Torrent>|CursorPaginator<int, Torrent>|LengthAwarePaginator<int, Torrent>|LengthAwarePaginator<int, Torrent&object{pivot: \App\Models\PlaylistTorrent}> $torrents
      *
      * @throws \MarcReichel\IGDBLaravel\Exceptions\MissingEndpointException
      * @throws \MarcReichel\IGDBLaravel\Exceptions\InvalidParamsException
@@ -34,14 +36,13 @@ trait TorrentMeta
      * @throws JsonException
      * @return (
      *        $torrents is \Illuminate\Database\Eloquent\Collection<int, \App\Models\Torrent> ? \Illuminate\Support\Collection<int, \App\Models\Torrent>
-     *     : ($torrents is \Illuminate\Pagination\CursorPaginator<int, \App\Models\Torrent> ? \Illuminate\Pagination\CursorPaginator<int, \App\Models\Torrent>
-     *     : ($torrents is \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Torrent> ? \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Torrent>
-     *     : \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, \App\Models\Torrent>
-     * )))
+     *     : ($torrents is CursorPaginator<int, \App\Models\Torrent> ? CursorPaginator<int, \App\Models\Torrent>
+     *     : LengthAwarePaginator<int, \App\Models\Torrent>
+     * ))
      */
-    public function scopeMeta(\Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\CursorPaginator|\Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Contracts\Pagination\LengthAwarePaginator $torrents, bool $withCredits = false): \Illuminate\Support\Collection|\Illuminate\Pagination\CursorPaginator|\Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function scopeMeta(\Illuminate\Database\Eloquent\Collection|CursorPaginator|LengthAwarePaginator $torrents, bool $withCredits = false): \Illuminate\Support\Collection|CursorPaginator|LengthAwarePaginator
     {
-        if ($torrents instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator || $torrents instanceof \Illuminate\Contracts\Pagination\CursorPaginator) {
+        if ($torrents instanceof LengthAwarePaginator || $torrents instanceof CursorPaginator) {
             $movieIds = collect($torrents->items())->where('meta', '=', 'movie')->pluck('tmdb_movie_id');
             $tvIds = collect($torrents->items())->where('meta', '=', 'tv')->pluck('tmdb_tv_id');
             $gameIds = collect($torrents->items())->where('meta', '=', 'game')->pluck('igdb');
@@ -93,14 +94,6 @@ trait TorrentMeta
             return $torrents->map($setRelation);
         }
 
-        /**
-         * Laravel's \Illuminate\Contracts\Pagination\LengthAwarePaginator does not have a through method
-         * but we are passed a \Illuminate\Pagination\LengthAwarePaginator which does have such a method.
-         * Seems to be caused by some Laravel type error that's returning an interface instead of the type
-         * itself, or that the interface is missing the method.
-         *
-         * @phpstan-ignore method.notFound
-         */
         return $torrents->through($setRelation);
     }
 
