@@ -163,10 +163,8 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         });
 
         // Reports System
-        Route::prefix('reports')->group(function (): void {
-            Route::post('/torrent/{id}', [App\Http\Controllers\ReportController::class, 'torrent'])->name('report_torrent')->whereNumber('id');
-            Route::post('/request/{id}', [App\Http\Controllers\ReportController::class, 'request'])->name('report_request')->whereNumber('id');
-            Route::post('/user/{username}', [App\Http\Controllers\ReportController::class, 'user'])->name('report_user');
+        Route::prefix('reports')->name('reports.')->group(function (): void {
+            Route::post('/', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
         });
 
         // Contact Us System

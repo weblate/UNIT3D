@@ -80,9 +80,14 @@
                                 <form
                                     class="dialog__form"
                                     method="POST"
-                                    action="{{ route('report_user', ['username' => $user->username]) }}"
+                                    action="{{ route('reports.store') }}"
                                 >
                                     @csrf
+                                    <input
+                                        type="hidden"
+                                        name="reported_user_username"
+                                        value="{{ $user->username }}"
+                                    />
                                     <p class="form__group">
                                         <textarea
                                             id="report_reason"

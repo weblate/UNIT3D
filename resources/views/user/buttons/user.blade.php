@@ -76,12 +76,13 @@
                 </button>
                 <dialog id="user-report" class="dialog" popover>
                     <h3 class="dialog__heading">Report user: {{ $user->username }}</h3>
-                    <form
-                        class="dialog__form"
-                        method="POST"
-                        action="{{ route('report_user', ['username' => $user->username]) }}"
-                    >
+                    <form class="dialog__form" method="POST" action="{{ route('reports.store') }}">
                         @csrf
+                        <input
+                            type="hidden"
+                            name="reported_user_username"
+                            value="{{ $user->username }}"
+                        />
                         <p class="form__group">
                             <textarea
                                 id="report_reason"
