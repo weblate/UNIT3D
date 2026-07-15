@@ -89,7 +89,6 @@ class UserUploads extends Component
                     ->where('seeder', '=', 1),
             ])
             ->withoutGlobalScope(ApprovedScope::class)
-            ->where('created_at', '>=', $this->user->created_at) // Unneeded, but increases performances
             ->where('user_id', '=', $this->user->id)
             ->when(
                 $this->name,
