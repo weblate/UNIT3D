@@ -156,10 +156,10 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         Route::prefix('rss')->name('rss.')->group(function (): void {
             Route::get('/', [App\Http\Controllers\RssController::class, 'index'])->name('index');
             Route::get('/create', [App\Http\Controllers\RssController::class, 'create'])->name('create');
-            Route::post('/store', [App\Http\Controllers\RssController::class, 'store'])->name('store');
+            Route::post('/', [App\Http\Controllers\RssController::class, 'store'])->name('store');
             Route::get('/{id}/edit', [App\Http\Controllers\RssController::class, 'edit'])->name('edit')->whereNumber('id');
-            Route::patch('/{id}/update', [App\Http\Controllers\RssController::class, 'update'])->name('update')->whereNumber('id');
-            Route::delete('/{id}/destroy', [App\Http\Controllers\RssController::class, 'destroy'])->name('destroy')->whereNumber('id');
+            Route::patch('/{id}', [App\Http\Controllers\RssController::class, 'update'])->name('update')->whereNumber('id');
+            Route::delete('/{id}', [App\Http\Controllers\RssController::class, 'destroy'])->name('destroy')->whereNumber('id');
         });
 
         // Reports System
@@ -170,7 +170,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         // Contact Us System
         Route::prefix('contact')->name('contact.')->group(function (): void {
             Route::get('/', [App\Http\Controllers\ContactController::class, 'index'])->name('index');
-            Route::post('/store', [App\Http\Controllers\ContactController::class, 'store'])->name('store');
+            Route::post('/', [App\Http\Controllers\ContactController::class, 'store'])->name('store');
         });
 
         // Pages System
@@ -507,7 +507,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             // Invites
             Route::prefix('invites')->name('invites.')->group(function (): void {
                 Route::get('/create', [App\Http\Controllers\User\InviteController::class, 'create'])->name('create');
-                Route::post('/store', [App\Http\Controllers\User\InviteController::class, 'store'])->name('store');
+                Route::post('/', [App\Http\Controllers\User\InviteController::class, 'store'])->name('store');
                 Route::post('/{sentInvite}/send', [App\Http\Controllers\User\InviteController::class, 'send'])->name('send');
                 Route::delete('/{sentInvite}', [App\Http\Controllers\User\InviteController::class, 'destroy'])->name('destroy')->withTrashed();
                 Route::get('/', [App\Http\Controllers\User\InviteController::class, 'index'])->name('index')->withTrashed();
@@ -680,7 +680,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             Route::prefix('articles')->name('articles.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\ArticleController::class, 'index'])->name('index');
                 Route::get('/create', [App\Http\Controllers\Staff\ArticleController::class, 'create'])->name('create');
-                Route::post('/store', [App\Http\Controllers\Staff\ArticleController::class, 'store'])->name('store');
+                Route::post('/', [App\Http\Controllers\Staff\ArticleController::class, 'store'])->name('store');
                 Route::get('/{article}', [App\Http\Controllers\Staff\ArticleController::class, 'edit'])->name('edit');
                 Route::post('/{article}', [App\Http\Controllers\Staff\ArticleController::class, 'update'])->name('update');
                 Route::delete('/{article}', [App\Http\Controllers\Staff\ArticleController::class, 'destroy'])->name('destroy');
@@ -1165,28 +1165,28 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             // Whitelisted Image URL Patterns
             Route::prefix('whitelisted-image-urls')->name('whitelisted_image_urls.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'index'])->name('index');
-                Route::post('/store', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'store'])->name('store');
-                Route::patch('/{whitelistedImageUrl}/update', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'update'])->name('update');
-                Route::delete('/{whitelistedImageUrl}/destroy', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'destroy'])->name('destroy');
+                Route::post('/', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'store'])->name('store');
+                Route::patch('/{whitelistedImageUrl}', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'update'])->name('update');
+                Route::delete('/{whitelistedImageUrl}', [App\Http\Controllers\Staff\WhitelistedImageUrlController::class, 'destroy'])->name('destroy');
             });
 
             // Wiki Categories System
             Route::prefix('wiki_categories')->name('wiki_categories.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\WikiCategoryController::class, 'index'])->name('index');
                 Route::get('/create', [App\Http\Controllers\Staff\WikiCategoryController::class, 'create'])->name('create');
-                Route::post('/store', [App\Http\Controllers\Staff\WikiCategoryController::class, 'store'])->name('store');
+                Route::post('/', [App\Http\Controllers\Staff\WikiCategoryController::class, 'store'])->name('store');
                 Route::get('/{wikiCategory}/edit', [App\Http\Controllers\Staff\WikiCategoryController::class, 'edit'])->name('edit');
-                Route::patch('/{wikiCategory}/update', [App\Http\Controllers\Staff\WikiCategoryController::class, 'update'])->name('update');
-                Route::delete('/{wikiCategory}/destroy', [App\Http\Controllers\Staff\WikiCategoryController::class, 'destroy'])->name('destroy');
+                Route::patch('/{wikiCategory}', [App\Http\Controllers\Staff\WikiCategoryController::class, 'update'])->name('update');
+                Route::delete('/{wikiCategory}', [App\Http\Controllers\Staff\WikiCategoryController::class, 'destroy'])->name('destroy');
             });
 
             // Wiki System
             Route::prefix('wikis')->name('wikis.')->group(function (): void {
                 Route::get('/create', [App\Http\Controllers\Staff\WikiController::class, 'create'])->name('create');
-                Route::post('/store', [App\Http\Controllers\Staff\WikiController::class, 'store'])->name('store');
+                Route::post('/', [App\Http\Controllers\Staff\WikiController::class, 'store'])->name('store');
                 Route::get('/{wiki}/edit', [App\Http\Controllers\Staff\WikiController::class, 'edit'])->name('edit');
-                Route::patch('/{wiki}/update', [App\Http\Controllers\Staff\WikiController::class, 'update'])->name('update');
-                Route::delete('/{wiki}/destroy', [App\Http\Controllers\Staff\WikiController::class, 'destroy'])->name('destroy');
+                Route::patch('/{wiki}', [App\Http\Controllers\Staff\WikiController::class, 'update'])->name('update');
+                Route::delete('/{wiki}', [App\Http\Controllers\Staff\WikiController::class, 'destroy'])->name('destroy');
             });
 
             // Donation System
