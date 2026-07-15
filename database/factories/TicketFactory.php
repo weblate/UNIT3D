@@ -47,8 +47,6 @@ class TicketFactory extends Factory
             'subject'     => $this->faker->word(),
             'body'        => $this->faker->text(),
             'closed_at'   => $this->faker->dateTime(),
-            'reminded_at' => $this->faker->dateTime(),
-            'deleted_at'  => $this->faker->dateTime(),
         ];
     }
 }
