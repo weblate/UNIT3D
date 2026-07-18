@@ -39,7 +39,7 @@ class WarningFactory extends Factory
         return [
             'user_id'    => User::factory(),
             'warned_by'  => User::factory(),
-            'torrent'    => Torrent::factory(),
+            'torrent_id' => Torrent::factory(),
             'reason'     => $this->faker->text(),
             'expires_on' => $this->faker->dateTime(),
             'active'     => $this->faker->boolean(),
