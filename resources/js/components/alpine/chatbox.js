@@ -155,9 +155,32 @@ document.addEventListener('alpine:init', () => {
                 this.fetchRooms(),
             ])
                 .then(() => {
-                    this.state.chat.conversation = this.conversations[0];
+                    this.state.chat.conversation = this.conversations.find(
+                        (conversation) => conversation.room?.id === this.auth.chatroom_id,
+                    );
+                    this.changeRoom(this.state.chat.conversation.room.id);
                     this.state.ui.loading = false;
                     this.listenForChatter();
+
+                    this.$watch('auth.chat_status_id', (status, oldStatus) => {
+                        if (status === oldStatus) return; // Closing a chatbox tab triggers this (alpinejs bug)
+                        this.syncStatus();
+                    });
+
+                    this.$watch('state.chat.room', (chatroom, oldChatroom) => {
+                        if (chatroom === oldChatroom) return;
+                        this.changeRoom(chatroom);
+                    });
+
+                    this.$cleanup = () => {
+                        if (this.channel) {
+                            window.Echo.leave(`chatroom.${this.state.chat.room}`);
+                        }
+                        if (this.chatter) {
+                            this.chatter.stopListening('Chatter');
+                        }
+                        clearTimeout(this.typingTimeout);
+                    };
 
                     setInterval(() => {
                         this.timestampTick++;
@@ -168,26 +191,6 @@ document.addEventListener('alpine:init', () => {
                     this.state.ui.error = 'Error loading chat. Please try again.';
                     this.state.ui.loading = false;
                 });
-
-            this.$watch('auth.chat_status_id', (status, oldStatus) => {
-                if (status === oldStatus) return; // Closing a chatbox tab triggers this (alpinejs bug)
-                this.syncStatus();
-            });
-
-            this.$watch('state.chat.room', (chatroom, oldChatroom) => {
-                if (chatroom === oldChatroom) return;
-                this.changeRoom(chatroom);
-            });
-
-            this.$cleanup = () => {
-                if (this.channel) {
-                    window.Echo.leave(`chatroom.${this.state.chat.room}`);
-                }
-                if (this.chatter) {
-                    this.chatter.stopListening('Chatter');
-                }
-                clearTimeout(this.typingTimeout);
-            };
         },
 
         // Fetchers
