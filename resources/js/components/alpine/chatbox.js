@@ -479,13 +479,25 @@ document.addEventListener('alpine:init', () => {
         },
 
         // Utility
-        sortConversations(obj) {
-            if (!obj || !Array.isArray(obj)) return [];
+        sortConversations(conversations) {
+            if (!conversations || !Array.isArray(conversations)) return [];
 
-            return obj.sort((a, b) => {
+            let conversationsSorted = conversations.sort((a, b) => {
                 let nv1 = a.room?.name || a.target?.username || a.bot?.name || '';
                 let nv2 = b.room?.name || b.target?.username || b.bot?.name || '';
                 return nv1.localeCompare(nv2);
+            });
+
+            return conversationsSorted.sort((a, b) => {
+                const priority = (conversation) =>
+                    conversation.room !== null
+                        ? 0
+                        : conversation.target !== null
+                          ? 1
+                          : conversation.bot !== null
+                            ? 2
+                            : 3;
+                return priority(a) - priority(b);
             });
         },
 
