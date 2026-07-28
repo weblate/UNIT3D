@@ -62,11 +62,20 @@ class ChatController extends Controller
             ->get();
 
         if ($conversations->isEmpty()) {
-            $conversations->push(ChatConversation::query()->create([
-                'user_id' => $request->user()->id,
-                'room_id' => 1,
-                'audible' => true,
-            ]));
+            ChatConversation::query()->upsert([[
+                'user_id'    => $request->user()->id,
+                'room_id'    => 1,
+                'audible'    => true,
+                'deleted_at' => null,
+            ]], ['user_id', 'room_id'], ['deleted_at']);
+
+            $conversations->push(
+                ChatConversation::query()
+                    ->whereBelongsTo($request->user())
+                    ->where('room_id', '=', 1)
+                    ->with(['bot', 'user', 'target', 'room'])
+                    ->first()
+            );
         }
 
         return ChatConversationResource::collection($conversations);
