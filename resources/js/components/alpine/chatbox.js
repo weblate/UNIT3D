@@ -117,7 +117,7 @@ const channelHandler = {
 };
 
 document.addEventListener('alpine:init', () => {
-    Alpine.data('chatbox', (user) => ({
+    Alpine.data('chatbox', () => ({
         state: {
             ui: {
                 loading: true,
@@ -133,7 +133,7 @@ document.addEventListener('alpine:init', () => {
             },
         },
 
-        auth: user,
+        auth: null,
         statuses: [],
         conversations: [],
         chatrooms: [],
@@ -148,6 +148,8 @@ document.addEventListener('alpine:init', () => {
         timestampTick: 0,
 
         init() {
+            this.auth = JSON.parse(atob(this.$root.dataset.user));
+
             Promise.all([
                 this.fetchStatuses(),
                 this.fetchConversations(),
@@ -589,6 +591,21 @@ document.addEventListener('alpine:init', () => {
             if (!timestamp) return '';
             this.timestampTick;
             return dayjs(timestamp).fromNow();
+        },
+
+        whispers() {
+            return this.activePeer.size > 3
+                ? 'Several people are typing...'
+                : this.activePeer.size === 1
+                  ? [...this.activePeer.keys()][0] + ' is typing...'
+                  : [...this.activePeer.keys()].slice(0, -1).join(', ') +
+                    ' and ' +
+                    [...this.activePeer.keys()][this.activePeer.size - 1] +
+                    ' are typing...';
+        },
+
+        renderMessage(html) {
+            this.$el.innerHTML = html;
         },
     }));
 });
