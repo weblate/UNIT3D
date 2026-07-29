@@ -29,7 +29,7 @@
         "laravel/octane": "^2.13.3",
         "laravel/scout": "^10.23.0",
         "laravel/tinker": "^2.10.2",
-        "livewire/livewire": "^4.1.4",
+        "livewire/livewire": "^4.3.3",
         "maennchen/zipstream-php": "^3.2.1",
         "marcreichel/igdb-laravel": "^5.3.1",
         "meilisearch/meilisearch-php": "^1.16.1",
