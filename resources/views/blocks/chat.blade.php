@@ -339,10 +339,7 @@
                     x-text="whispers"
                 ></span>
             </section>
-            <form
-                class="form chatroom__new-message"
-                @submit.prevent="createMessage($refs.message.value)"
-            >
+            <form class="form chatroom__new-message">
                 <p class="form__group">
                     <textarea
                         id="chatbox__messages-create"
@@ -350,8 +347,8 @@
                         name="message"
                         placeholder=" "
                         x-ref="message"
-                        @keydown.enter="!$event.shiftKey && ($event.preventDefault(), createMessage($refs.message.value), $refs.message.value = '')"
-                        @keyup="isTyping(auth)"
+                        x-on:keydown.enter="createMessage"
+                        x-on:keyup="isTyping(auth)"
                     ></textarea>
                     <label class="form__label form__label--floating" for="chatbox__messages-create">
                         Write your message...

@@ -406,8 +406,14 @@ document.addEventListener('alpine:init', () => {
         },
 
         // Delegate message operations to messageHandler
-        createMessage(message) {
-            return messageHandler.create(message, this);
+        createMessage(event) {
+            if (event.shiftKey) {
+                return;
+            }
+
+            event.preventDefault();
+
+            return messageHandler.create(this.$el.value, this);
         },
 
         deleteMessage(id) {
