@@ -16,7 +16,6 @@
         "ext-zip": "*",
         "assada/laravel-achievements": "^2.8",
         "bjeavons/zxcvbn-php": "^1.4.2",
-        "doctrine/dbal": "^3.10.4",
         "gabrielelana/byte-units": "^0.5.0",
         "graham-campbell/markdown": "^v16.0.0",
         "hdvinnie/laravel-joypixel-emojis": "^3.0.1",
