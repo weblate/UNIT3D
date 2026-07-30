@@ -35,7 +35,6 @@
         "meilisearch/meilisearch-php": "^1.16.1",
         "paragonie/constant_time_encoding": "^2.8.2",
         "spatie/laravel-backup": "^9.3.7",
-        "spatie/laravel-image-optimizer": "^1.8.2",
         "spatie/ssl-certificate": "^2.6.10",
         "symfony/dom-crawler": "^6.4.25",
         "theodorejb/polycast": "dev-master",
