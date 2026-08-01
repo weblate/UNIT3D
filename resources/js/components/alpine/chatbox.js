@@ -157,9 +157,10 @@ document.addEventListener('alpine:init', () => {
                 this.fetchRooms(),
             ])
                 .then(() => {
-                    this.state.chat.conversation = this.conversations.find(
-                        (conversation) => conversation.room?.id === this.auth.chatroom_id,
-                    );
+                    this.state.chat.conversation =
+                        this.conversations.find(
+                            (conversation) => conversation.room?.id === this.auth.chatroom_id,
+                        ) ?? this.conversations[0].room.id;
                     this.changeRoom(this.state.chat.conversation.room.id);
                     this.state.ui.loading = false;
                     this.listenForChatter();
@@ -273,9 +274,9 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        async fetchMessages() {
+        async fetchRoomMessages(id) {
             try {
-                const response = await axios.get(`/api/chat/messages/${this.state.chat.room}`);
+                const response = await axios.get(`/api/chat/messages/${id}`);
                 // Process messages to add canMod property for each message and sanitize content
                 this.messages = new Map(
                     response.data.data
@@ -331,7 +332,7 @@ document.addEventListener('alpine:init', () => {
             this.state.chat.conversation = conversation;
 
             if (conversation.room !== null) {
-                this.fetchMessages();
+                this.fetchRoomMessages(conversation.room.id);
             }
 
             if (conversation.target !== null) {
@@ -350,22 +351,18 @@ document.addEventListener('alpine:init', () => {
         },
 
         changeRoom(id) {
-            if (this.auth.chatroom.id === id) {
-                this.fetchMessages();
-            } else {
-                axios
-                    .post(`/api/chat/user/chatroom`, { room_id: id })
-                    .then((response) => {
-                        this.auth = response.data;
-                        this.state.chat.conversation = this.conversations.find(
-                            (conversation) => conversation.room?.id === id,
-                        );
-                        this.fetchMessages();
-                    })
-                    .catch((error) => {
-                        console.error('Error changing room:', error);
-                    });
-            }
+            axios
+                .post(`/api/chat/user/chatroom`, { room_id: id })
+                .then((response) => {
+                    this.auth = response.data;
+                    this.state.chat.conversation = this.conversations.find(
+                        (conversation) => conversation.room?.id === id,
+                    );
+                    this.fetchRoomMessages(id);
+                })
+                .catch((error) => {
+                    console.error('Error changing room:', error);
+                });
 
             // Set up room channel with improved connection handling
             channelHandler.setupRoom(id, this);
