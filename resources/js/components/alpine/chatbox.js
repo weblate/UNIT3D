@@ -226,8 +226,6 @@ document.addEventListener('alpine:init', () => {
                 this.chatrooms = response.data.data;
                 if (this.chatrooms.length > 0) {
                     this.state.chat.room = this.auth.chatroom.id;
-                    this.state.chat.tab = this.auth.chatroom.name;
-                    this.state.chat.activeTab = 'room' + this.state.chat.room;
                 }
             } catch (error) {
                 console.error('Error fetching rooms:', error);
@@ -425,7 +423,7 @@ document.addEventListener('alpine:init', () => {
 
             if (!this._debouncedIsTyping) {
                 this._debouncedIsTyping = debounce(function (e) {
-                    if (self.state.chat.target < 1 && self.channel && self.state.chat.tab != '') {
+                    if (self.state.chat.target < 1 && self.channel) {
                         self.channel.whisper('typing', { username: e.username });
                     }
                 }, 300);
