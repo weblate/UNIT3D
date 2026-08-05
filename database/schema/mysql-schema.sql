@@ -1775,10 +1775,8 @@ CREATE TABLE `tickets` (
   `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `body` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `closed_at` timestamp NULL DEFAULT NULL,
-  `reminded_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `tickets_user_id_foreign` (`user_id`),
   KEY `tickets_staff_id_foreign` (`staff_id`),
@@ -3143,3 +3141,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2026_04_22_06
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2026_06_26_132559_update_history_indexes',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (382,'2026_06_27_065215_rename_bounty_requests_id',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (383,'2026_06_27_193400_add_apikey_permissions',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (384,'2026_07_15_070539_remove_unused_ticket_columns',1);
