@@ -3,7 +3,7 @@
         <h2 class="panel__heading">{{ __('user.bans') }}</h2>
         <div class="panel__actions">
             <div class="panel__action">
-                @if ($user->group->id === 5)
+                @if ($user->group->slug === 'banned')
                     <button class="form__button form__button--text" popovertarget="unban-add">
                         {{ __('user.unban') }}
                     </button>
@@ -29,21 +29,6 @@
                                 <span class="form__hint">
                                     The reason is only visible for staff.
                                 </span>
-                            </p>
-                            <p class="form__group">
-                                <select id="group_id" class="form__select" name="group_id" required>
-                                    <option value="{{ $user->group->id }}">
-                                        {{ $user->group->name }} (Default)
-                                    </option>
-                                    @foreach (App\Models\Group::query()->orderByDesc('position')->get() as $group)
-                                        <option value="{{ $group->id }}">
-                                            {{ $group->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <label class="form__label form__label--floating" for="group_id">
-                                    New group
-                                </label>
                             </p>
                             <p class="form__group">
                                 <button class="form__button form__button--filled">
