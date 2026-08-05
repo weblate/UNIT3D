@@ -90,16 +90,23 @@
                                         <h3 class="dialog__heading">
                                             Note user: {{ $user->username }}
                                         </h3>
-                                        <form class="dialog__form">
+                                        <form
+                                            class="dialog__form"
+                                            method="POST"
+                                            action="{{ route('staff.notes.update', ['note' => $note]) }}"
+                                            x-data="formSubmit"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
                                             <p class="form__group">
                                                 <textarea
                                                     id="message"
                                                     class="form__textarea"
                                                     name="message"
                                                     placeholder=" "
-                                                    wire:model="messages.{{ $note->id }}"
-                                                    value="{{ $note->message }}"
-                                                ></textarea>
+                                                >
+{{ $note->message }}</textarea
+                                                >
                                                 <label
                                                     class="form__label form__label--floating"
                                                     for="message"
@@ -110,8 +117,6 @@
                                             <p class="form__group">
                                                 <button
                                                     class="form__button form__button--filled"
-                                                    x-on:click="update"
-                                                    type="button"
                                                     popovertarget="note-edit-{{ $note->id }}"
                                                 >
                                                     {{ __('common.save') }}

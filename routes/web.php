@@ -1117,6 +1117,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             // User Staff Notes
             Route::prefix('notes')->name('notes.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\NoteController::class, 'index'])->name('index');
+                Route::patch('/{note}', [App\Http\Controllers\Staff\NoteController::class, 'update'])->name('update');
             });
 
             // User Tools TODO: Leaving since we will be refactoring users and roles
