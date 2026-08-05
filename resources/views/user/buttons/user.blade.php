@@ -313,7 +313,7 @@
                         method="POST"
                         style="display: contents"
                     >
-                        @csrf()
+                        @csrf
                         @method('DELETE')
                         <button class="nav-tab__link" type="submit">
                             {{ __('staff.flush-ghost-peers') }}
