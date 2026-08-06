@@ -184,12 +184,7 @@ class TmdbPersonCredit extends Component
                     'resolution_id',
                     'personal_release',
                 ])
-                ->selectRaw(<<<'SQL'
-                CASE
-                    WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
-                END as meta
-            SQL)
+                ->selectRaw(self::META_TYPE_CASE_MOVIE_TV.' as meta')
                 ->withCount([
                     'comments',
                 ])

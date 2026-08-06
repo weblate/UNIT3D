@@ -82,17 +82,7 @@ class TorrentController extends BaseController
                     'featured as featured'
                 ])
                 ->select('*')
-                ->selectRaw(
-                    "
-                CASE
-                    WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
-                    WHEN category_id IN (SELECT `id` from `categories` where `game_meta` = 1) THEN 'game'
-                    WHEN category_id IN (SELECT `id` from `categories` where `music_meta` = 1) THEN 'music'
-                    WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
-                END as meta
-            "
-                )
+                ->selectRaw(self::META_TYPE_CASE.' as meta')
                 ->latest('sticky')
                 ->latest('bumped_at')
                 ->cursorPaginate(25);
@@ -261,15 +251,7 @@ class TorrentController extends BaseController
         $torrent = Torrent::query()
             ->with(['user:id,username', 'category', 'type', 'resolution', 'region', 'distributor', 'files'])
             ->select('*')
-            ->selectRaw("
-                CASE
-                    WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
-                    WHEN category_id IN (SELECT `id` from `categories` where `game_meta` = 1) THEN 'game'
-                    WHEN category_id IN (SELECT `id` from `categories` where `music_meta` = 1) THEN 'music'
-                    WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
-                END as meta
-            ")
+            ->selectRaw(self::META_TYPE_CASE.' as meta')
             ->findOrFail($id);
 
         $torrent->setAttribute('meta', null);
@@ -334,15 +316,7 @@ class TorrentController extends BaseController
             $eagerLoads = fn (Builder $query) => $query
                 ->with(['user:id,username', 'category', 'type', 'resolution', 'distributor', 'region', 'files'])
                 ->select('*')
-                ->selectRaw("
-                    CASE
-                        WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
-                        WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
-                        WHEN category_id IN (SELECT `id` from `categories` where `game_meta` = 1) THEN 'game'
-                        WHEN category_id IN (SELECT `id` from `categories` where `music_meta` = 1) THEN 'music'
-                        WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
-                    END as meta
-                ");
+                ->selectRaw(self::META_TYPE_CASE.' as meta');
 
             $filters = new TorrentSearchFiltersDTO(
                 name: $request->filled('name') ? $request->string('name')->toString() : '',

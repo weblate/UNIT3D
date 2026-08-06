@@ -28,6 +28,29 @@ use Illuminate\Pagination\LengthAwarePaginator;
 trait TorrentMeta
 {
     /**
+     * Resolves a torrent's meta type (movie/tv/game/music/no) from its category_id.
+     */
+    public const string META_TYPE_CASE = <<<'SQL'
+        CASE
+            WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
+            WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
+            WHEN category_id IN (SELECT id FROM categories WHERE game_meta = 1) THEN 'game'
+            WHEN category_id IN (SELECT id FROM categories WHERE music_meta = 1) THEN 'music'
+            WHEN category_id IN (SELECT id FROM categories WHERE no_meta = 1) THEN 'no'
+        END
+        SQL;
+
+    /**
+     * Same as META_TYPE_CASE but restricted to movie/tv, for grouping torrents by TMDB id.
+     */
+    public const string META_TYPE_CASE_MOVIE_TV = <<<'SQL'
+        CASE
+            WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
+            WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
+        END
+        SQL;
+
+    /**
      * @param \Illuminate\Database\Eloquent\Collection<int, Torrent>|CursorPaginator<int, Torrent>|LengthAwarePaginator<int, Torrent>|LengthAwarePaginator<int, Torrent&object{pivot: \App\Models\PlaylistTorrent}> $torrents
      *
      * @throws \MarcReichel\IGDBLaravel\Exceptions\MissingEndpointException
