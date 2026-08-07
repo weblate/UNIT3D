@@ -30,8 +30,6 @@ trait TorrentMeta
     /**
      * @param \Illuminate\Database\Eloquent\Collection<int, Torrent>|CursorPaginator<int, Torrent>|LengthAwarePaginator<int, Torrent>|LengthAwarePaginator<int, Torrent&object{pivot: \App\Models\PlaylistTorrent}> $torrents
      *
-     * @throws \MarcReichel\IGDBLaravel\Exceptions\MissingEndpointException
-     * @throws \MarcReichel\IGDBLaravel\Exceptions\InvalidParamsException
      * @throws ReflectionException
      * @throws JsonException
      * @return (

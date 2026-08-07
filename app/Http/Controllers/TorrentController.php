@@ -77,9 +77,7 @@ class TorrentController extends Controller
      * Display The Torrent resource.
      *
      * @throws JsonException
-     * @throws \MarcReichel\IGDBLaravel\Exceptions\MissingEndpointException
      * @throws ReflectionException
-     * @throws \MarcReichel\IGDBLaravel\Exceptions\InvalidParamsException
      */
     public function show(Request $request, int|string $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
