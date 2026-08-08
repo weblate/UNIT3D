@@ -29,7 +29,6 @@
         "laravel/tinker": "^2.10.2",
         "livewire/livewire": "^4.3.3",
         "maennchen/zipstream-php": "^3.2.1",
-        "marcreichel/igdb-laravel": "^5.3.1",
         "meilisearch/meilisearch-php": "^1.16.1",
         "spatie/laravel-backup": "^9.3.7",
         "spatie/ssl-certificate": "^2.6.10",
