@@ -261,7 +261,7 @@ class ChatController extends Controller
 
     public function deleteTargetConversation(Request $request): \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         ChatConversation::query()->where('user_id', '=', $user->id)->where('target_id', '=', $request->input('target_id'))->delete();
 
         $user->load(['chatStatus', 'chatroom', 'group']);
@@ -278,7 +278,7 @@ class ChatController extends Controller
 
     public function deleteBotConversation(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         ChatConversation::query()->where('user_id', '=', $user->id)->where('bot_id', '=', $request->input('bot_id'))->delete();
 
         $user->load(['chatStatus', 'chatroom', 'group']);
@@ -291,7 +291,7 @@ class ChatController extends Controller
 
     public function toggleRoomAudible(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         $conversation = ChatConversation::query()->where('user_id', '=', $user->id)->where('room_id', '=', $request->input('room_id'))->sole();
         $conversation->audible = !$conversation->audible;
         $conversation->save();
@@ -306,7 +306,7 @@ class ChatController extends Controller
 
     public function toggleTargetAudible(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         $conversation = ChatConversation::query()->where('user_id', '=', $user->id)->where('target_id', '=', $request->input('target_id'))->sole();
         $conversation->audible = !$conversation->audible;
         $conversation->save();
@@ -321,7 +321,7 @@ class ChatController extends Controller
 
     public function toggleBotAudible(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         $conversation = ChatConversation::query()->where('user_id', '=', $user->id)->where('bot_id', '=', $request->input('bot_id'))->sole();
         $conversation->audible = !$conversation->audible;
         $conversation->save();
@@ -351,7 +351,7 @@ class ChatController extends Controller
 
     public function updateUserRoom(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         $room = Chatroom::query()->findOrFail($request->integer('room_id'));
 
         $user->chatroom()->dissociate();
@@ -381,7 +381,7 @@ class ChatController extends Controller
 
     public function updateBotRoom(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('group');
         $bot = Bot::query()->findOrFail($request->integer('bot_id'));
 
         // Create echo for user if missing
