@@ -157,9 +157,6 @@
     <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
         document.addEventListener('alpine:init', () => {
             Alpine.data('userNote', () => ({
-                update() {
-                    this.$wire.update(this.$root.dataset.noteId);
-                },
                 destroy() {
                     Swal.fire({
                         title: 'Are you sure?',
