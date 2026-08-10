@@ -105,15 +105,7 @@ class PlaylistController extends Controller
 
         $torrents = $playlist->torrents()
             ->select('*')
-            ->selectRaw(<<<'SQL'
-                CASE
-                    WHEN category_id IN (SELECT id from categories where movie_meta = TRUE) THEN 'movie'
-                    WHEN category_id IN (SELECT id from categories where tv_meta = TRUE) THEN 'tv'
-                    WHEN category_id IN (SELECT id from categories where game_meta = TRUE) THEN 'game'
-                    WHEN category_id IN (SELECT id from categories where music_meta = TRUE) THEN 'music'
-                    WHEN category_id IN (SELECT id from categories where no_meta = TRUE) THEN 'no'
-                END as meta
-            SQL)
+            ->selectRaw(self::META_TYPE_CASE.' as meta')
             ->when($request->has('search'), fn ($query) => $query->where('name', 'LIKE', '%'.str_replace(' ', '%', $request->search).'%'))
             ->with(['category', 'resolution', 'type', 'user.group'])
             ->orderBy('name')

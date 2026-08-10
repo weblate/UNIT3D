@@ -473,15 +473,7 @@ class TorrentSearch extends Component
                         ->where('seeder', '=', 1),
                     'trump',
                 ])
-                ->selectRaw(<<<'SQL'
-                CASE
-                    WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
-                    WHEN category_id IN (SELECT id FROM categories WHERE game_meta = 1) THEN 'game'
-                    WHEN category_id IN (SELECT id FROM categories WHERE music_meta = 1) THEN 'music'
-                    WHEN category_id IN (SELECT id FROM categories WHERE no_meta = 1) THEN 'no'
-                END AS meta
-            SQL);
+                ->selectRaw(self::META_TYPE_CASE.' AS meta');
 
             if ($isSqlAllowed) {
                 $torrents = Torrent::query()
@@ -549,12 +541,7 @@ class TorrentSearch extends Component
                 ->selectRaw('MAX(bumped_at) as bumped_at')
                 ->selectRaw('MAX(created_at) as created_at')
                 ->selectRaw('SUM(times_completed) as times_completed')
-                ->selectRaw(<<<'SQL'
-                MIN(CASE
-                    WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
-                END) AS meta
-            SQL)
+                ->selectRaw('MIN('.self::META_TYPE_CASE_MOVIE_TV.') AS meta')
                 ->havingNotNull('meta')
                 ->where(fn ($query) => $query->whereNotNull('tmdb_movie_id')->orWhereNotNull('tmdb_tv_id'))
                 ->whereNotNull('imdb')
@@ -594,12 +581,7 @@ class TorrentSearch extends Component
                     'resolution_id',
                     'personal_release',
                 ])
-                ->selectRaw(<<<'SQL'
-                CASE
-                    WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
-                END AS meta
-            SQL)
+                ->selectRaw(self::META_TYPE_CASE_MOVIE_TV.' AS meta')
                 ->withCount([
                     'comments',
                 ])
@@ -773,12 +755,7 @@ class TorrentSearch extends Component
                 ->selectRaw('MAX(bumped_at) as bumped_at')
                 ->selectRaw('SUM(times_completed) as times_completed')
                 ->selectRaw('MIN(category_id) as category_id')
-                ->selectRaw(<<<'SQL'
-                MIN(CASE
-                    WHEN category_id IN (SELECT id FROM categories WHERE movie_meta = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT id FROM categories WHERE tv_meta = 1) THEN 'tv'
-                END) AS meta
-            SQL)
+                ->selectRaw('MIN('.self::META_TYPE_CASE_MOVIE_TV.') AS meta')
                 ->havingNotNull('meta')
                 ->where(fn ($query) => $query->whereNotNull('tmdb_movie_id')->orWhereNotNull('tmdb_tv_id'))
                 ->where($this->filters()->toSqlQueryBuilder())
