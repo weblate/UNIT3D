@@ -149,7 +149,12 @@
                         </form>
                     </dialog>
                     @if (Session::has('apikey'))
-                        <dialog class="dialog" popover x-data x-init="$el.showModal()">
+                        <dialog
+                            class="dialog"
+                            popover
+                            x-data="newApikey"
+                            x-init="$el.showModal()"
+                        >
                             <h3 class="dialog__heading">New key</h3>
                             <div class="dialog__form">
                                 <p>
@@ -166,8 +171,21 @@
                                     </button>
                                     <button
                                         class="form__button form__button--outlined"
-                                        x-on:click="
-                                            navigator.clipboard.writeText($refs.apikey.textContent);
+                                        x-on:click.stop="copy"
+                                    >
+                                        Copy key to clipboard
+                                    </button>
+                                </p>
+                            </div>
+                            <script
+                                nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}"
+                            >
+                                document.addEventListener('alpine:init', () => {
+                                    Alpine.data('newApikey', () => ({
+                                        copy() {
+                                            navigator.clipboard.writeText(
+                                                this.$refs.apikey.textContent,
+                                            );
                                             Swal.fire({
                                                 toast: true,
                                                 position: 'top-end',
@@ -176,12 +194,10 @@
                                                 icon: 'success',
                                                 title: 'Copied to clipboard!',
                                             });
-                                        "
-                                    >
-                                        Copy key to clipboard
-                                    </button>
-                                </p>
-                            </div>
+                                        },
+                                    }));
+                                });
+                            </script>
                         </dialog>
                     @endif
                 </div>
