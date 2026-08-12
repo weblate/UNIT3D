@@ -141,7 +141,7 @@
                                 <button
                                     class="form__button form__button--outlined"
                                     type="button"
-                                    popovertarget="url-add"
+                                    popovertarget="apikey-add"
                                 >
                                     {{ __('common.cancel') }}
                                 </button>
