@@ -1363,21 +1363,15 @@
                 <dl class="key-value">
                     <div class="key-value__group">
                         <dt>{{ __('user.article-comments') }}</dt>
-                        <dd>
-                            {{ $user->comments()->whereHasMorph('commentable', [App\Models\Article::class])->count() }}
-                        </dd>
+                        <dd>{{ $user->article_comments_count }}</dd>
                     </div>
                     <div class="key-value__group">
                         <dt>{{ __('user.torrent-comments') }}</dt>
-                        <dd>
-                            {{ $user->comments()->whereHasMorph('commentable', [App\Models\Torrent::class])->count() }}
-                        </dd>
+                        <dd>{{ $user->torrent_comments_count }}</dd>
                     </div>
                     <div class="key-value__group">
                         <dt>{{ __('user.request-comments') }}</dt>
-                        <dd>
-                            {{ $user->comments()->whereHasMorph('commentable', [App\Models\TorrentRequest::class])->count() }}
-                        </dd>
+                        <dd>{{ $user->request_comments_count }}</dd>
                     </div>
                 </dl>
             </section>

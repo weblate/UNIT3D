@@ -18,11 +18,14 @@ namespace App\Http\Controllers\User;
 
 use App\Enums\ModerationStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\BonTransactions;
 use App\Models\Donation;
 use App\Models\History;
 use App\Models\Invite;
 use App\Models\Peer;
+use App\Models\Torrent;
+use App\Models\TorrentRequest;
 use App\Models\User;
 use App\Services\Unit3dAnnounce;
 use Assada\Achievements\Model\AchievementProgress;
@@ -42,6 +45,8 @@ class UserController extends Controller
      */
     public function show(Request $request, User $user): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
+        $canViewAnonymousComments = $request->user()->is($user) || $request->user()->group->is_modo;
+
         $user->load([
             'application',
             'privacy',
@@ -53,6 +58,15 @@ class UserController extends Controller
                 'torrents as non_anon_uploads_count' => fn ($query) => $query->where('anon', '=', false),
                 'topics',
                 'posts',
+                'comments as article_comments_count' => fn ($query) => $query
+                    ->whereHasMorph('commentable', [Article::class])
+                    ->when(!$canViewAnonymousComments, fn ($query) => $query->where('anon', '=', false)),
+                'comments as torrent_comments_count' => fn ($query) => $query
+                    ->whereHasMorph('commentable', [Torrent::class])
+                    ->when(!$canViewAnonymousComments, fn ($query) => $query->where('anon', '=', false)),
+                'comments as request_comments_count' => fn ($query) => $query
+                    ->whereHasMorph('commentable', [TorrentRequest::class])
+                    ->when(!$canViewAnonymousComments, fn ($query) => $query->where('anon', '=', false)),
                 'filledRequests' => fn ($query) => $query->whereNotNull('approved_by'),
                 'requests',
                 'warnings as active_warnings_count'       => fn ($query) => $query->where('active', '=', 1),
