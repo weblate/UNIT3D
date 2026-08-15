@@ -59,6 +59,7 @@ class AutoGroup extends Command
 
         $userQuery = User::query()
             ->withSum('seedingTorrents as seedsize', 'size')
+            ->withSum(['history as actual_uploaded' => fn ($query) => $query->withTrashed()], 'actual_uploaded')
             ->withCount([
                 'torrents as uploads',
                 'warnings' => fn ($query) => $query->where('active', '=', true),
@@ -75,6 +76,7 @@ class AutoGroup extends Command
             foreach ($groups as $group) {
                 if (
                     ($group->min_uploaded === null || $user->uploaded >= $group->min_uploaded)
+                    && ($group->min_actual_uploaded === null || $user->actual_uploaded >= $group->min_actual_uploaded)
                     && ($group->min_ratio === null || $user->ratio >= $group->min_ratio)
                     && ($group->min_age === null || $timestamp - $user->created_at->timestamp >= $group->min_age)
                     && ($group->min_avg_seedtime === null || $user->avg_seedtime >= $group->min_avg_seedtime)

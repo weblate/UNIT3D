@@ -146,6 +146,13 @@ class StoreGroupRequest extends FormRequest
                     'min:0',
                 ], 'prohibited'),
             ],
+            'group.min_actual_uploaded' => [
+                Rule::when($request->boolean('autogroup'), [
+                    'sometimes',
+                    'integer',
+                    'min:0',
+                ], 'prohibited'),
+            ],
             'group.min_ratio' => [
                 Rule::when($request->boolean('autogroup'), [
                     'sometimes',

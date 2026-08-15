@@ -802,6 +802,7 @@ CREATE TABLE `groups` (
   `is_incognito` tinyint(1) NOT NULL DEFAULT '0',
   `autogroup` tinyint(1) NOT NULL DEFAULT '0',
   `min_uploaded` bigint unsigned DEFAULT NULL,
+  `min_actual_uploaded` bigint unsigned DEFAULT NULL,
   `min_seedsize` bigint unsigned DEFAULT NULL,
   `min_avg_seedtime` bigint unsigned DEFAULT NULL,
   `min_ratio` decimal(4,2) DEFAULT NULL,
@@ -3142,3 +3143,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2026_06_26_13
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (382,'2026_06_27_065215_rename_bounty_requests_id',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (383,'2026_06_27_193400_add_apikey_permissions',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (384,'2026_07_15_070539_remove_unused_ticket_columns',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (385,'2026_08_15_075513_add_min_actual_uploaded_to_groups_table',1);
