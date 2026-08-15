@@ -24,6 +24,7 @@ use App\Models\User;
 use App\Observers\UserObserver;
 use App\View\Composers\FooterComposer;
 use App\View\Composers\TopNavComposer;
+use HDVinnie\SecureHeaders\SecureHeaders;
 use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -127,6 +128,8 @@ class AppServiceProvider extends ServiceProvider
 
             return $apikey->user;
         });
+
+        Vite::useCspNonce(SecureHeaders::nonce());
 
         Context::add('url', $request->url());
     }
