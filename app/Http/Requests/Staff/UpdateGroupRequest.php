@@ -29,7 +29,14 @@ class UpdateGroupRequest extends FormRequest
      */
     public function authorize(Request $request): bool
     {
-        return $request->user()->group->is_owner || $request->group['is_owner'] != 1;
+        return $request->user()->group->is_owner || (
+            /** @phpstan-ignore property.notFound (phpstan doesn't understand route parameters) */
+            $request->route('group')->level < $request->user()->group->level
+            && $request->group['level'] < $request->user()->group->level
+            && !$request->group['is_owner']
+            /** @phpstan-ignore property.notFound (phpstan doesn't understand route parameters) */
+            && !$request->route('group')->is_owner
+        );
     }
 
     /**
