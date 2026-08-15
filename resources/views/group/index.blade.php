@@ -67,6 +67,25 @@
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td>Min. Actual Upload</td>
+                                                <td>
+                                                    {{ \App\Helpers\StringHelper::formatBytes($group->min_actual_uploaded ?? 0) }}
+                                                </td>
+                                                <td>
+                                                    @if ($user_actual_uploaded >= $group->min_actual_uploaded ?? 0)
+                                                        <i
+                                                            class="{{ config('other.font-awesome') }} fa-check text-green"
+                                                        ></i>
+                                                    @else
+                                                        <i
+                                                            class="{{ config('other.font-awesome') }} fa-x text-red"
+                                                        ></i>
+                                                        |
+                                                        {{ \App\Helpers\StringHelper::formatBytes($group->min_actual_uploaded - $user_actual_uploaded) }}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td>Min. Ratio</td>
                                                 <td>{{ $group->min_ratio ?? 0 }}</td>
                                                 <td>

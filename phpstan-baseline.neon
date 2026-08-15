@@ -7,6 +7,12 @@ parameters:
 			path: app/Console/Commands/AutoDeactivateWarning.php
 
 		-
+			message: '#^Access to an undefined property App\\Models\\User\:\:\$actual_uploaded\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/AutoGroup.php
+
+		-
 			message: '#^Access to an undefined property App\\Models\\User\:\:\$avg_seedtime\.$#'
 			identifier: property.notFound
 			count: 1

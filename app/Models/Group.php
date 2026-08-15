@@ -57,6 +57,7 @@ use Override;
  * @property bool        $autogroup
  * @property bool        $system_required
  * @property int|null    $min_uploaded
+ * @property int|null    $min_actual_uploaded
  * @property int|null    $min_seedsize
  * @property int|null    $min_avg_seedtime
  * @property string|null $min_ratio
