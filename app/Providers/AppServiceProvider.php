@@ -18,6 +18,15 @@ namespace App\Providers;
 
 use App\Helpers\ByteUnits;
 use App\Helpers\HiddenCaptcha;
+use App\Http\Middleware\BlockIpAddress;
+use App\Http\Middleware\CheckApiScope;
+use App\Http\Middleware\CheckForAdmin;
+use App\Http\Middleware\CheckForModo;
+use App\Http\Middleware\CheckForOwner;
+use App\Http\Middleware\CheckIfBanned;
+use App\Http\Middleware\ConfirmTwoFactor;
+use App\Http\Middleware\SetLanguage;
+use App\Http\Middleware\UpdateLastAction;
 use App\Interfaces\ByteUnitsInterface;
 use App\Models\Apikey;
 use App\Models\User;
@@ -33,6 +42,7 @@ use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Override;
 
 class AppServiceProvider extends ServiceProvider
@@ -128,6 +138,18 @@ class AppServiceProvider extends ServiceProvider
 
             return $apikey->user;
         });
+
+        Livewire::addPersistentMiddleware([
+            BlockIpAddress::class,
+            CheckApiScope::class,
+            CheckForAdmin::class,
+            CheckForModo::class,
+            CheckForOwner::class,
+            CheckIfBanned::class,
+            ConfirmTwoFactor::class,
+            SetLanguage::class,
+            UpdateLastAction::class,
+        ]);
 
         Vite::useCspNonce(SecureHeaders::nonce());
 
