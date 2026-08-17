@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ac70703588200b9c354993ef8fbf1a9",
+    "content-hash": "3f596090aeddb36564b240b4d025ff17",
     "packages": [
         {
             "name": "assada/laravel-achievements",
@@ -1481,26 +1481,26 @@
         },
         {
             "name": "hdvinnie/laravel-security-headers",
-            "version": "v3.0.3",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/HDVinnie/laravel-security-headers.git",
-                "reference": "21974846b9178a541702d6526f9ea5b8543bf640"
+                "reference": "bf2fbe9d21dffc887ad8d048fb6d76a47e3119dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/HDVinnie/laravel-security-headers/zipball/21974846b9178a541702d6526f9ea5b8543bf640",
-                "reference": "21974846b9178a541702d6526f9ea5b8543bf640",
+                "url": "https://api.github.com/repos/HDVinnie/laravel-security-headers/zipball/bf2fbe9d21dffc887ad8d048fb6d76a47e3119dc",
+                "reference": "bf2fbe9d21dffc887ad8d048fb6d76a47e3119dc",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
                 "php": "^7.4|^8.0"
             },
             "require-dev": {
                 "ext-json": "*",
                 "ext-xdebug": "*",
-                "orchestra/testbench": "^3.1|^4.0|^5.0|^6.0|^7.0|^8.0|^9.0|^10.0"
+                "orchestra/testbench": "^3.1|^4.0|^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0"
             },
             "suggest": {
                 "friendsofphp/php-cs-fixer": "Coding style fixer",
@@ -1552,9 +1552,9 @@
             ],
             "support": {
                 "issues": "https://github.com/HDVinnie/laravel-security-headers/issues",
-                "source": "https://github.com/HDVinnie/laravel-security-headers/tree/v3.0.3"
+                "source": "https://github.com/HDVinnie/laravel-security-headers/tree/v3.1.0"
             },
-            "time": "2025-07-19T23:38:31+00:00"
+            "time": "2026-08-16T21:10:08+00:00"
         },
         {
             "name": "intervention/image",
