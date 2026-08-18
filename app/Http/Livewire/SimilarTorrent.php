@@ -414,7 +414,7 @@ class SimilarTorrent extends Component
             type: 'warning',
             message: 'Are you sure?',
             body: 'If deleted, you will not be able to recover the following files!'.nl2br("\n")
-                        .nl2br(implode("\n", $names)),
+                        .nl2br(implode("\n", array_map(e(...), $names))),
         );
     }
 
