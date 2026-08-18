@@ -927,7 +927,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Mass Actions
             Route::prefix('mass-actions')->group(function (): void {
-                Route::get('/validate-users', [App\Http\Controllers\Staff\MassActionController::class, 'update'])->name('mass-actions.validate');
+                Route::post('/validate-users', [App\Http\Controllers\Staff\MassActionController::class, 'update'])->name('mass-actions.validate');
             });
 
             // Mass Email

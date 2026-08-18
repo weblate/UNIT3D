@@ -568,7 +568,7 @@
                 </p>
                 <div class="form__group form__group--horizontal">
                     <form
-                        method="GET"
+                        method="POST"
                         action="{{ route('staff.mass-actions.validate') }}"
                         x-data="confirmation"
                     >
