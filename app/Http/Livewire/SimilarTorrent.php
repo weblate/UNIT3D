@@ -37,6 +37,7 @@ use App\Traits\CastLivewireProperties;
 use App\Traits\LivewireSort;
 use App\Traits\TorrentMeta;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
@@ -50,8 +51,10 @@ class SimilarTorrent extends Component
 
     public TmdbMovie|TmdbTv|IgdbGame $work;
 
+    #[Locked]
     public ?int $tmdbId;
 
+    #[Locked]
     public ?int $igdbId;
 
     public string $reason;
