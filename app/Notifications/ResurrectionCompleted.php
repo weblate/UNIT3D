@@ -53,7 +53,7 @@ class ResurrectionCompleted extends Notification implements ShouldQueue, SystemN
     {
         return [
             'subject' => 'Graveyard resurrection complete',
-            'message' => 'You resurrected [url='.href_torrent($this->torrent)."{$this->torrent->name}[/url]. Enjoy your freeleech tokens.",
+            'message' => 'You resurrected [url='.href_torrent($this->torrent)."]{$this->torrent->name}[/url]. Enjoy your freeleech tokens.",
         ];
     }
 }
